@@ -4,3 +4,9 @@
 *.jar
 *.war
 *.ear
+NextGenApplication/nbproject/build-impl.xml
+NextGenApplication/nbproject/genfiles.properties
+NextGenApplication/nbproject/private/private.properties
+NextGenApplication/nbproject/private/private.xml
+NextGenApplication\build/
+NextGenApplication/build/classes/
