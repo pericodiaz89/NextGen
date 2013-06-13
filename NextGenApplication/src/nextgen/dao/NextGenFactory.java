@@ -9,4 +9,5 @@ package nextgen.dao;
  * @author Rodrigo
  */
 public class NextGenFactory {
+    
 }
