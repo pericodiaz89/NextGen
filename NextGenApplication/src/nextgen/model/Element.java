@@ -13,25 +13,28 @@ import java.util.HashSet;
 public class Element extends Entity {
 
     private Element parent;
+    private String tableName;
     private HashSet<Attribute> attributes;
     private HashSet<Key> keys;
 
-    public Element(int id, String name, String description, Element parent, HashSet<Attribute> attributes, HashSet<Key> keys) {
-        super(id, name, description);
+    public Element(String name, String description, String tableName, Element parent, HashSet<Attribute> attributes, HashSet<Key> keys) {
+        super(name, description);
         this.parent = parent;
+        this.tableName = tableName;
         this.attributes = attributes;
         this.keys = keys;
     }
 
-    public Element(int id, String name, String description) {
-        super(id, name, description);
+    public Element(int id, String name, String description, String tableName) {
+        super(name, description);
         parent = null;
+        this.tableName = tableName;
         attributes = new HashSet<>();
         keys = new HashSet<>();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
-    
+
     public Element getParent() {
         return parent;
     }
@@ -54,6 +57,14 @@ public class Element extends Entity {
 
     public void setKeys(HashSet<Key> keys) {
         this.keys = keys;
+    }
+
+    public String getTableName() {
+        return tableName;
+    }
+
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
     // </editor-fold>
 }

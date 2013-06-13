@@ -14,13 +14,13 @@ public class Project extends Entity {
 
     private HashSet<Package> packages;
 
-    public Project(int id, String name, String description) {
-        super(id, name, description);
+    public Project(String name, String description) {
+        super(name, description);
         packages = new HashSet<>();
     }
 
     public Project(int id, String name, String description, HashSet<Package> packages) {
-        super(id, name, description);
+        super(name, description);
         this.packages = packages;
     }
 
