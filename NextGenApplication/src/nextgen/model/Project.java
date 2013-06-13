@@ -25,11 +25,11 @@ public class Project extends Entity {
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
-    public HashSet<Element> getPackages() {
+    public HashSet<Element> getElements() {
         return elements;
     }
 
-    public void setPackages(HashSet<Element> elements) {
+    public void setElements(HashSet<Element> elements) {
         this.elements = elements;
     }
     // </editor-fold>

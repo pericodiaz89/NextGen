@@ -108,6 +108,8 @@ public class FProject extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void setElementList() {
-        
+        for (Element e : project.getElements()){
+
+        }
     }
 }
