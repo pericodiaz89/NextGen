@@ -12,25 +12,25 @@ import java.util.HashSet;
  */
 public class Project extends Entity {
 
-    private HashSet<Package> packages;
+    private HashSet<Element> elements;
 
     public Project(String name, String description) {
         super(name, description);
-        packages = new HashSet<>();
+        elements = new HashSet<>();
     }
 
-    public Project(int id, String name, String description, HashSet<Package> packages) {
+    public Project(int id, String name, String description, HashSet<Element> elements) {
         super(name, description);
-        this.packages = packages;
+        this.elements = elements;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
-    public HashSet<Package> getPackages() {
-        return packages;
+    public HashSet<Element> getPackages() {
+        return elements;
     }
 
-    public void setPackages(HashSet<Package> packages) {
-        this.packages = packages;
+    public void setPackages(HashSet<Element> elements) {
+        this.elements = elements;
     }
     // </editor-fold>
 }
