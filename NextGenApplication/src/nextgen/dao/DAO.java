@@ -16,7 +16,7 @@ import nextgen.model.enums.KeyType;
  */
 public class DAO {
     
-    public Project getProjects(){
+    public Project getProjects(String dir){
         return null;
     }
     
