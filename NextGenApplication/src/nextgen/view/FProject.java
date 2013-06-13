@@ -1,5 +1,6 @@
 package nextgen.view;
 
+import nextgen.model.Element;
 import nextgen.model.Project;
 
 public class FProject extends javax.swing.JFrame {
@@ -9,6 +10,7 @@ public class FProject extends javax.swing.JFrame {
     public FProject(Project project) {
         this.project = project;
         initComponents();
+        setElementList();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -16,11 +18,11 @@ public class FProject extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        listElements = new javax.swing.JList();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        bAdd = new javax.swing.JButton();
+        bDelete = new javax.swing.JButton();
+        spElements = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -29,15 +31,15 @@ public class FProject extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Elements"));
 
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(listElements);
 
-        jPanel2.setLayout(new java.awt.GridLayout());
+        jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
-        jButton1.setText("Add");
-        jPanel2.add(jButton1);
+        bAdd.setText("Add");
+        jPanel2.add(bAdd);
 
-        jButton2.setText("Delete");
-        jPanel2.add(jButton2);
+        bDelete.setText("Delete");
+        jPanel2.add(bDelete);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -76,7 +78,7 @@ public class FProject extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
+                .addComponent(spElements, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -85,7 +87,7 @@ public class FProject extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2))
+                    .addComponent(spElements))
                 .addContainerGap())
         );
 
@@ -93,15 +95,21 @@ public class FProject extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JList jList1;
+    private javax.swing.JButton bAdd;
+    private javax.swing.JButton bDelete;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JList listElements;
+    private javax.swing.JScrollPane spElements;
     // End of variables declaration//GEN-END:variables
+
+    private void setElementList() {
+        for (Element e : project.getElements()){
+
+        }
+    }
 }

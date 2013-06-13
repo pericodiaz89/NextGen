@@ -14,13 +14,15 @@ public class Element extends Entity {
 
     private Element parent;
     private String tableName;
+    private Package package1;
     private HashSet<Attribute> attributes;
     private HashSet<Key> keys;
 
-    public Element(String name, String description, String tableName, Element parent, HashSet<Attribute> attributes, HashSet<Key> keys) {
+    public Element(String name, String description, String tableName, Package package1, Element parent, HashSet<Attribute> attributes, HashSet<Key> keys) {
         super(name, description);
         this.parent = parent;
         this.tableName = tableName;
+        this.package1 = package1;
         this.attributes = attributes;
         this.keys = keys;
     }
@@ -34,7 +36,6 @@ public class Element extends Entity {
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
-
     public Element getParent() {
         return parent;
     }
@@ -65,6 +66,14 @@ public class Element extends Entity {
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
+    }
+
+    public Package getPackage1() {
+        return package1;
+    }
+
+    public void setPackage1(Package package1) {
+        this.package1 = package1;
     }
     // </editor-fold>
 }
