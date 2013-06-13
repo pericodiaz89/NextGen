@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nextgen.model;
 
 /**
@@ -10,25 +6,15 @@ package nextgen.model;
  */
 public class Entity {
 
-    private int id;
     private String name;
     private String description;
 
-    public Entity(int id, String name, String description) {
-        this.id = id;
+    public Entity(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
