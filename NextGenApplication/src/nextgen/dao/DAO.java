@@ -1,6 +1,9 @@
 package nextgen.dao;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import lib.json.JSONObject;
 import nextgen.model.Element;
 import nextgen.model.Project;
 import nextgen.model.Attribute;
@@ -21,7 +24,17 @@ public class DAO {
     }
     
     public void saveProject(Project project){
+        int iter = 0;
+        HashMap<String, Object> data = new HashMap<>();
         
+        Iterator elements = project.getElements().iterator();
+        while(elements.hasNext()){
+            Object element = elements.next();
+            data.put("Element" + iter, element);
+            iter++;
+        }
+        JSONObject jObject = new JSONObject(data);
+        System.out.println(jObject.toString());
     }
     
     public static void main(String [] args){       
