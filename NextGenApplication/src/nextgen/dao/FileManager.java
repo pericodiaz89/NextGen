@@ -5,9 +5,7 @@
 package nextgen.dao;
 
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 /**
  *
@@ -15,7 +13,7 @@ import java.io.ObjectOutputStream;
  */
 public class FileManager {
     
-    public static Object loadData(String fileName) throws Exception {
+    public Object loadData(String fileName) throws Exception {
         FileInputStream fis;
         ObjectInputStream in;
         fis = new FileInputStream(fileName);
@@ -25,12 +23,15 @@ public class FileManager {
         return object;
     }
     
-    public static void saveData(Object object, String fileName) throws Exception {
-        FileOutputStream fos;
+    public void saveData(Object object, String fileName) throws Exception {
+        
+        /*FileOutputStream fos;
         ObjectOutputStream out;
         fos = new FileOutputStream(fileName);
         out = new ObjectOutputStream(fos);
-        out.writeObject(object);
+        out.writeUTF(object);
         out.close();
+        System.out.println("all ok");*/
+        
     }
 }
