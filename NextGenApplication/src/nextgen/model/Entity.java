@@ -30,5 +30,10 @@ public class Entity {
     public void setDescription(String description) {
         this.description = description;
     }
+
     // </editor-fold>
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

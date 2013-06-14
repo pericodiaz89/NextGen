@@ -27,10 +27,11 @@ public class Element extends Entity {
         this.keys = keys;
     }
 
-    public Element(int id, String name, String description, String tableName) {
+    public Element(String name, String description, String tableName) {
         super(name, description);
         parent = null;
         this.tableName = tableName;
+        this.package1 = new Package("", "");
         attributes = new HashSet<>();
         keys = new HashSet<>();
     }
@@ -75,5 +76,7 @@ public class Element extends Entity {
     public void setPackage1(Package package1) {
         this.package1 = package1;
     }
+
     // </editor-fold>
+
 }

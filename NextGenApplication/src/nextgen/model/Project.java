@@ -19,7 +19,7 @@ public class Project extends Entity {
         elements = new HashSet<>();
     }
 
-    public Project(int id, String name, String description, HashSet<Element> elements) {
+    public Project(String name, String description, HashSet<Element> elements) {
         super(name, description);
         this.elements = elements;
     }

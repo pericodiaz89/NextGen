@@ -28,6 +28,15 @@ public class Attribute {
         this.defaultValue = defaultValue;
     }
 
+    public Object[] getRow() {
+        return new Object[]{this, name, entity, cardinality, required, defaultValue, comment};
+    }
+
+    @Override
+    public String toString() {
+        return "0";
+    }
+
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
     public String getName() {
         return name;
