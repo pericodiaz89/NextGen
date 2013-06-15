@@ -72,7 +72,7 @@ public class DAO {
         
         Entity entity = new Entity("Entity1", "An Entity");
         
-        Attribute atrribute = new Attribute("roomId", entity, Cardinality.Single, true, null, null);
+        Attribute atrribute = new Attribute(25, "roomId", entity, Cardinality.Single, true, null, null, false, "" );
         
         HashSet<Attribute> attributes = new HashSet<>();
         attributes.add(atrribute);
