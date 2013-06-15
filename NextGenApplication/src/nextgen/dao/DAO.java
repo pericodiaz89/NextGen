@@ -1,14 +1,10 @@
 package nextgen.dao;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lib.json.JSONException;
 import lib.json.JSONObject;
 import nextgen.model.Element;
 import nextgen.model.Project;
@@ -41,7 +37,7 @@ public class DAO {
         
         Iterator elements = project.getElements().iterator();
         while(elements.hasNext()){
-            data.put("Element" + iter++, elements.next());            
+            data.put("Entity-" + iter++, elements.next());            
         }
         JSONObject obj = new JSONObject(data);
         

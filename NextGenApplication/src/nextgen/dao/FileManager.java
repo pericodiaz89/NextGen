@@ -26,18 +26,9 @@ public class FileManager {
     }
     
     public void saveData(JSONObject object, String fileName) throws Exception {
-        
-        FileWriter file = new FileWriter(fileName);
-        file.write(object.toString());
-        file.flush();
-        file.close();
-        /*FileOutputStream fos;
-        ObjectOutputStream out;
-        fos = new FileOutputStream(fileName);
-        out = new ObjectOutputStream(fos);
-        out.writeUTF(object);
-        out.close();
-        System.out.println("all ok");*/
-        
+        try (FileWriter file = new FileWriter(fileName)) {
+            file.write(object.toString());
+            file.flush();
+        }
     }
 }
