@@ -35,35 +35,24 @@ public class DAO {
         return null;
     }
     
-    public void saveProject(Project project) throws IOException{
-        int iter = 0;
+    public void saveProject(Project project){
+        int iter = 1;
         HashMap<String, Object> data = new HashMap<>();
         
         Iterator elements = project.getElements().iterator();
         while(elements.hasNext()){
-            Object element = elements.next();
-            data.put("Element" + iter, element);
-            iter++;
+            data.put("Element" + iter++, elements.next());            
         }
         JSONObject obj = new JSONObject(data);
         
-        FileWriter file = new FileWriter("file1.txt");
-        
         try {
-            file.write(obj.toString());
+            fileManager.saveData(obj, "file1.txt");
             System.out.println("Successfully Copied JSON Object to File...");
             System.out.println("\nJSON Object: " + obj);
-        } catch (IOException e) {
-            e.getMessage();
-        } finally {
-            file.flush();
-            file.close();
+        } catch (Exception e) {
+            System.out.println("Exception: " + e.getMessage());
         }
-//        try {
-//            fileManager.saveData(jObject, "Element2.txt");
-//        } catch (Exception ex) {
-//            System.out.println("Exception: " + ex.getMessage());
-//        }
+        
     }
     
     public static void main(String [] args){       
@@ -93,7 +82,7 @@ public class DAO {
         DAO dao = new DAO();
         try {
             dao.saveProject(project);
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
