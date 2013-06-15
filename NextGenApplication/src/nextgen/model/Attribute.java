@@ -21,7 +21,9 @@ public class Attribute {
     private int id;
     private boolean autoincrement; 
 
-    public Attribute(int id, String name, Entity entity, Cardinality cardinality, boolean required, String comment, String defaultValue, boolean autoincrement, String commonTable) {
+    public Attribute(int id, String name, Entity entity, Cardinality cardinality,
+                        boolean required, String comment, String defaultValue, 
+                            boolean autoincrement, String commonTable) {
         this.name = name;
         this.entity = entity;
         this.cardinality = cardinality;

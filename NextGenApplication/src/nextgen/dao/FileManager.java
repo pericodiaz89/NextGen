@@ -16,13 +16,14 @@ import lib.json.JSONObject;
 public class FileManager {
     
     public Object loadData(String fileName) throws Exception {
-        FileInputStream fis;
+        /*FileInputStream fis;
         ObjectInputStream in;
         fis = new FileInputStream(fileName);
         in = new ObjectInputStream(fis);
         Object object = in.readObject();
         in.close();
-        return object;
+        return object;*/
+        return null;
     }
     
     public void saveData(JSONObject object, String fileName) throws Exception {
