@@ -5,7 +5,9 @@
 package nextgen.dao;
 
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.ObjectInputStream;
+import lib.json.JSONObject;
 
 /**
  *
@@ -23,8 +25,12 @@ public class FileManager {
         return object;
     }
     
-    public void saveData(Object object, String fileName) throws Exception {
+    public void saveData(JSONObject object, String fileName) throws Exception {
         
+        FileWriter file = new FileWriter(fileName);
+        file.write(object.toString());
+        file.flush();
+        file.close();
         /*FileOutputStream fos;
         ObjectOutputStream out;
         fos = new FileOutputStream(fileName);
