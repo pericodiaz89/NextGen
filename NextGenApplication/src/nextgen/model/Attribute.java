@@ -18,14 +18,17 @@ public class Attribute {
     private boolean required;
     private String comment;
     private String defaultValue;
+    private int id;
+    private boolean autoincrement; 
 
-    public Attribute(String name, Entity entity, Cardinality cardinality, boolean required, String comment, String defaultValue) {
+    public Attribute(int id, String name, Entity entity, Cardinality cardinality, boolean required, String comment, String defaultValue, boolean autoincrement, String commonTable) {
         this.name = name;
         this.entity = entity;
         this.cardinality = cardinality;
         this.required = required;
         this.comment = comment;
         this.defaultValue = defaultValue;
+        this.autoincrement = autoincrement;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
@@ -76,5 +79,33 @@ public class Attribute {
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the autoincrement
+     */
+    public boolean isAutoincrement() {
+        return autoincrement;
+    }
+
+    /**
+     * @param autoincrement the autoincrement to set
+     */
+    public void setAutoincrement(boolean autoincrement) {
+        this.autoincrement = autoincrement;
+    }
     // </editor-fold>
+
 }
