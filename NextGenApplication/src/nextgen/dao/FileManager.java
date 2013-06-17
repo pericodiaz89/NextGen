@@ -4,9 +4,11 @@
  */
 package nextgen.dao;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.io.ObjectInputStream;
+import java.io.InputStreamReader;
 import lib.json.JSONObject;
 
 /**
@@ -15,15 +17,13 @@ import lib.json.JSONObject;
  */
 public class FileManager {
     
-    public Object loadData(String fileName) throws Exception {
-        /*FileInputStream fis;
-        ObjectInputStream in;
-        fis = new FileInputStream(fileName);
-        in = new ObjectInputStream(fis);
-        Object object = in.readObject();
-        in.close();
-        return object;*/
-        return null;
+    public JSONObject loadData(String fileName) throws Exception {
+        //http://codigomaldito.blogspot.com/2011/06/como-leer-un-archivo-de-texto-en-java.html
+        DataInputStream in = new DataInputStream(new FileInputStream(fileName));        
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(in));                
+        JSONObject obj = new JSONObject(buffer.readLine());        
+        in.close();                
+        return obj;
     }
     
     public void saveData(JSONObject object, String fileName) throws Exception {

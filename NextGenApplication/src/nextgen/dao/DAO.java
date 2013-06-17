@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import lib.json.JSONArray;
 import lib.json.JSONObject;
 import nextgen.model.Element;
 import nextgen.model.Project;
@@ -27,8 +28,52 @@ public class DAO {
         fileManager = new FileManager();
     }
     
-    public Project getProjects(String dir){
+    public Project getProjects(String dir) throws Exception{      
+        
+        JSONObject obj = fileManager.loadData(dir);        
+        System.out.println(obj.toString());
+        Iterator elements = obj.keys();
+        
+        while(elements.hasNext()){
+            Object o = elements.next();
+            System.out.println(o);
+        }
+        
+        
+//        
+//        Iterator elements = obj.keys();
+//        
+//        while(elements.hasNext()){            
+//            System.out.println(elements.next());            
+//        }
+        
         return null;
+              
+        
+//        Package package1 = new Package("nextgen.Entities", "No desc");        
+//        
+//        Entity entity = new Entity("Entity1", "An Entity");        
+//        
+//        Attribute atrribute = new Attribute(25, "roomId", entity, Cardinality.Single, true, null, null, false, "" );                
+//        
+//        HashSet<Attribute> attributes = new HashSet<>();
+//        attributes.add(atrribute);        
+//        
+//        Key key = new Key("Key", KeyType.Unique, attributes);        
+//        
+//        HashSet<Key> keys = new HashSet<>();
+//        keys.add(key);                
+//        
+//        Element element = new Element("House", "Pretty House", "Tbl_House", package1, null, attributes, keys);        
+//        
+//        HashSet<Element> elements = new HashSet<>();       
+//        elements.add(element);        
+//        
+//        Project project = new Project(1, "TestProject", "This is a test project" , elements);
+//        
+        
+        
+//        return null;
     }
     
     public void saveProject(Project project){
@@ -90,7 +135,8 @@ public class DAO {
         
         DAO dao = new DAO();
         try {
-            dao.saveProject(project);
+            //dao.saveProject(project);
+            dao.getProjects("src/nextgen/files/TestProject.ng");
         } catch (Exception ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
