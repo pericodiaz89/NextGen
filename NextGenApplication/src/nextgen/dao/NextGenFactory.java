@@ -10,4 +10,6 @@ package nextgen.dao;
  */
 public class NextGenFactory {
     
+   
+    
 }

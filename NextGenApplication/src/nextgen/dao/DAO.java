@@ -1,6 +1,12 @@
 package nextgen.dao;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import lib.json.JSONException;
 import lib.json.JSONObject;
+import nextgen.model.Element;
 import nextgen.model.Project;
 
 /**
@@ -15,61 +21,73 @@ public class DAO {
         fileManager = new FileManager();
     }
 
-    public Project getProjects(String dir){
+    public Project getProjects(String dir) throws JSONException{
+        JSONObject obj = new JSONObject();        
+        try {
+            obj = fileManager.loadData(dir);
+            
+            JSONObject elements = obj.getJSONObject("elements");
+                        
+            Iterator i = elements.keys();
+            while(i.hasNext()){  
+                JSONObject elem = (JSONObject) i.next();
+                JSONObject keys = elem.getJSONObject("keys");
+                if(keys != null){
+                    ////////////DUDA PARA RODRIGO ////////////////////
+                }
+                String descriptionElement = elem.getString("description");
+                String tableNameElement = elem.getString("tablename");
+                String nameElement = elem.getString("name");
+                
+                JSONObject packageElement = elem.getJSONObject("package");
+                String descriptionPackage = packageElement.getString("description");
+                String namePackage = packageElement.getString("name");
+                
+                JSONObject attributes = elem.getJSONObject("attributes");
+                if (attributes != null){
+                    
+                    Iterator attributeIter = attributes.keys();
+                    while(attributeIter.hasNext()){
+                        JSONObject attr = (JSONObject) attributeIter.next();
+                        String autoIncrement = attr.getString("true");
+                        String nameAttr = attr.getString("name");
+                        
+                        JSONObject entity = attr.getJSONObject("entity");
+                        String descriptionEntity = entity.getString("description");
+                        String nameEntity = entity.getString("name");
+                        
+                        String commonTable = entity.getString("commonTable");
+                        String required = entity.getString("required");
+                        String comment = entity.getString("comment");
+                        String defaultValue = entity.getString("defaultValue");
+                        String cardinality = entity.getJSONObject("cardinality").toString();
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            ex.getMessage();
+        }        
         return null;
     }
 
+     public HashSet<Element> getElements(JSONObject obj){
+         HashSet<Element> elementList = new HashSet<>();
+         
+         return null;
+     }
+    
     public void saveProject(Project project, String path) throws Exception {
-        int iter = 1;
-
-        JSONObject obj = new JSONObject(project);
+        JSONObject obj = new JSONObject(project.toHashMap());
         fileManager.saveData(obj, path + project.getName() + ".ng");
     }
-
-    public static void main(String[] args) {
-//        Package package1 = new Package("nextgen.Entities", "No desc");
-//        Package package2 = new Package("nextgen.Entities", "No desc");
-//
-//        Entity entity = new Entity("Entity1", "An Entity");
-//        Entity entity2 = new Entity("Entity2", "A Greater Entity");
-//
-//        Attribute atrribute = new Attribute(25, "roomId", entity, Cardinality.Single, true, null, null, false, "" );
-//        Attribute atrribute2 = new Attribute(26, "roomTenant", entity, Cardinality.Single, true, null, null, false, "" );
-//        Attribute atrribute3 = new Attribute(27, "roomState", entity2, Cardinality.Multiple, true, null, null, false, "" );
-//        Attribute atrribute4 = new Attribute(28, "roomTomcat", entity2, Cardinality.Multiple, true, null, null, false, "" );
-//
-//        HashSet<Attribute> attributes = new HashSet<>();
-//        attributes.add(atrribute);
-//        attributes.add(atrribute2);
-//
-//        HashSet<Attribute> attributes2 = new HashSet<>();
-//        attributes2.add(atrribute3);
-//        attributes2.add(atrribute4);
-//
-//        Key key = new Key("Key", KeyType.Unique, attributes);
-//        Key key2 = new Key("Key", KeyType.Unique, attributes2);
-//
-//        HashSet<Key> keys = new HashSet<>();
-//        keys.add(key);
-//
-//        HashSet<Key> keys2 = new HashSet<>();
-//        keys2.add(key2);
-//
-//        Element element = new Element("House", "Pretty House", "Tbl_House", package1, null, attributes, keys);
-//        Element element2 = new Element("Room", "Pretty Room", "Tbl_Room", package2, null, attributes2, keys2);
-//
-//        HashSet<Element> elements = new HashSet<>();
-//        elements.add(element);
-//        elements.add(element2);
-//
-//        Project project =
-//                new Project("TestProject", "This is a test project" , elements);
-//
-//        DAO dao = new DAO();
-//        try {
-//            dao.saveProject(project, "hola.ng");
-//        } catch (Exception ex) {
-//            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+    
+    public static void main(String [] args){
+        DAO dao = new DAO();
+        
+        try {
+            dao.getProjects("src/nextgen/files/test.ng");
+        } catch (JSONException ex) {
+            Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

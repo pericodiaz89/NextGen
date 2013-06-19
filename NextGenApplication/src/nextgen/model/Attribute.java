@@ -40,7 +40,17 @@ public class Attribute {
     }
 
     public HashMap<String, Object> toHashMap() {
-        return null;
+        HashMap<String, Object> attributes = new HashMap<>();
+        attributes.put("name", this.getName());
+        attributes.put("entity", this.getEntity().toHashMap());
+        attributes.put("cardinality", this.getCardinality());
+        attributes.put("required", this.isRequired());
+        attributes.put("comment", this.getComment());
+        attributes.put("defaultValue", this.getDefaultValue());
+        attributes.put("autoincrement", this.isAutoincrement());
+        attributes.put("commonTable", this.getCommonTable());
+        
+        return attributes;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
