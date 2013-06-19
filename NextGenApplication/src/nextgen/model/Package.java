@@ -4,8 +4,6 @@
  */
 package nextgen.model;
 
-import java.util.HashSet;
-
 /**
  *
  * @author Rodrigo

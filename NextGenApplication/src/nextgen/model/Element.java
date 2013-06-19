@@ -4,6 +4,8 @@
  */
 package nextgen.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -27,13 +29,33 @@ public class Element extends Entity {
         this.keys = keys;
     }
 
-    public Element(int id, String name, String description, String tableName) {
+    public Element(String name, String description, String tableName) {
         super(name, description);
         parent = null;
         this.tableName = tableName;
+        this.package1 = new Package("", "");
         attributes = new HashSet<>();
         keys = new HashSet<>();
     }
+
+    @Override
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> map = super.toHashMap();
+        if (parent != null) {
+            map.put("parent", parent.getName());
+        }
+        map.put("tablename", tableName);
+        if (package1 != null) {
+            map.put("package", package1.toHashMap());
+        }
+        ArrayList<HashMap<String, Object>> atts = new ArrayList<>();
+        for (Attribute a : this.attributes) {
+            atts.add(a.toHashMap());
+        }
+        // Seguir
+        return map;
+    }
+
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
     public Element getParent() {
@@ -75,5 +97,7 @@ public class Element extends Entity {
     public void setPackage1(Package package1) {
         this.package1 = package1;
     }
+
     // </editor-fold>
+
 }

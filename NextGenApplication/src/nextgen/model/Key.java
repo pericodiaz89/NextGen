@@ -29,6 +29,12 @@ public class Key {
         this.attributes = attributes;
     }
 
+    @Override
+    public String toString() {
+        return name + " : " + type.toString();
+    }
+
+
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
     public String getName() {
         return name;
