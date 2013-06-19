@@ -1,15 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nextgen.model;
 
+import java.util.HashMap;
 import nextgen.model.enums.Cardinality;
 
-/**
- *
- * @author Rodrigo
- */
+
 public class Attribute {
 
     private String name;
@@ -19,11 +13,13 @@ public class Attribute {
     private String comment;
     private String defaultValue;
     private int id;
-    private boolean autoincrement; 
+    private boolean autoincrement;
+    private String commonTable;
 
     public Attribute(int id, String name, Entity entity, Cardinality cardinality,
-                        boolean required, String comment, String defaultValue, 
-                            boolean autoincrement, String commonTable) {
+                        boolean required, String comment, String defaultValue,
+            boolean autoincrement, String commonTable) {
+        this.id = id;
         this.name = name;
         this.entity = entity;
         this.cardinality = cardinality;
@@ -31,15 +27,20 @@ public class Attribute {
         this.comment = comment;
         this.defaultValue = defaultValue;
         this.autoincrement = autoincrement;
+        this.commonTable = commonTable;
     }
 
     public Object[] getRow() {
-        return new Object[]{this, name, entity, cardinality, required, defaultValue, comment};
+        return new Object[]{this, name, entity, cardinality, required, autoincrement, commonTable, defaultValue, comment};
     }
 
     @Override
     public String toString() {
-        return "0";
+        return id + "";
+    }
+
+    public HashMap<String, Object> toHashMap() {
+        return null;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
@@ -117,6 +118,13 @@ public class Attribute {
     public void setAutoincrement(boolean autoincrement) {
         this.autoincrement = autoincrement;
     }
-    // </editor-fold>
 
+    public String getCommonTable() {
+        return commonTable;
+    }
+
+    public void setCommonTable(String commonTable) {
+        this.commonTable = commonTable;
+    }
+    // </editor-fold>
 }

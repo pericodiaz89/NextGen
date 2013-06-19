@@ -5,17 +5,14 @@
 package nextgen.view;
 
 import javax.swing.DefaultCellEditor;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JTable;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import nextgen.model.Attribute;
 import nextgen.model.Element;
@@ -23,16 +20,17 @@ import nextgen.model.Entity;
 import nextgen.model.Key;
 import nextgen.model.Package;
 import nextgen.model.enums.Cardinality;
+import nextgen.model.enums.KeyType;
 
 /**
  *
  * @author Rodrigo
  */
-public class PElement extends javax.swing.JPanel {
+public final class PElement extends javax.swing.JPanel {
 
     private FProject project;
     private Element element;
-    private String[] columnTitles = new String[]{"Id", "Name", "Type", "Cardinality", "Required", "Default Value", "Comment"};
+    private String[] columnTitles = new String[]{"Id", "Name", "Type", "Cardinality", "Required", "AI", "Table", "Default Value", "Comment"};
     private DefaultTableModel tableModel;
     private DefaultListModel<Key> listModel;
     public static JComboBox<Entity> cbEntities;
@@ -44,11 +42,12 @@ public class PElement extends javax.swing.JPanel {
         initComponents();
         setTableModels();
         setListModel();
-        setPackages();
         setParents();
         setElement();
         addListeners();
+        refreshPackages();
         refreshTable();
+        refreshKeys();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -169,12 +168,27 @@ public class PElement extends javax.swing.JPanel {
         jPanel2.setLayout(new java.awt.GridLayout(1, 0));
 
         bCreateKey.setText("Create");
+        bCreateKey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bCreateKeyActionPerformed(evt);
+            }
+        });
         jPanel2.add(bCreateKey);
 
         bEditKey.setText("Edit");
+        bEditKey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bEditKeyActionPerformed(evt);
+            }
+        });
         jPanel2.add(bEditKey);
 
         bDeleteKey.setText("Delete");
+        bDeleteKey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDeleteKeyActionPerformed(evt);
+            }
+        });
         jPanel2.add(bDeleteKey);
 
         jPanel3.setLayout(new java.awt.GridLayout(1, 0));
@@ -188,6 +202,11 @@ public class PElement extends javax.swing.JPanel {
         jPanel3.add(bCreateAttribute);
 
         bDeleteAttribute.setText("Delete");
+        bDeleteAttribute.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bDeleteAttributeActionPerformed(evt);
+            }
+        });
         jPanel3.add(bDeleteAttribute);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -248,11 +267,59 @@ public class PElement extends javax.swing.JPanel {
     }//GEN-LAST:event_bUpdateActionPerformed
 
     private void bCreateAttributeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCreateAttributeActionPerformed
-        Attribute attribute = new Attribute("", new Element("", "", ""), Cardinality.Single, false, "", "");
+        Attribute attribute = new Attribute(
+                element.getAttributes().size() + 1,
+                "Attribute" + taAttributes.getRowCount(), new Element("", "", ""), Cardinality.Single, false, "", "", true, "");
         element.getAttributes().add(attribute);
         tableModel.addRow(attribute.getRow());
         NextGenHelper.adjustColumns(taAttributes);
     }//GEN-LAST:event_bCreateAttributeActionPerformed
+
+    private void bCreateKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bCreateKeyActionPerformed
+        Key k = new Key("key", KeyType.Primary);
+        element.getKeys().add(k);
+        refreshKeys();
+        DKey dk = new DKey(project, this, k);
+        dk.setVisible(true);
+    }//GEN-LAST:event_bCreateKeyActionPerformed
+
+    private void bEditKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bEditKeyActionPerformed
+        if (listKeys.getSelectedIndex() >= 0) {
+            Key k = (Key) listKeys.getSelectedValue();
+            DKey dk = new DKey(project, this, k);
+            dk.setVisible(true);
+        }
+    }//GEN-LAST:event_bEditKeyActionPerformed
+
+    private void bDeleteKeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteKeyActionPerformed
+        int[] selected = listKeys.getSelectedIndices();
+        if (selected.length > 0) {
+            int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete " + selected.length + " Key(s)?", "Warning!", JOptionPane.WARNING_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+                for (int index : selected) {
+                    element.getKeys().remove((Key) listKeys.getModel().getElementAt(index));
+                }
+                refreshKeys();
+            }
+        }
+    }//GEN-LAST:event_bDeleteKeyActionPerformed
+
+    private void bDeleteAttributeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteAttributeActionPerformed
+        int[] selected = taAttributes.getSelectedRows();
+        if (selected.length > 0) {
+            int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete " + selected.length + " Attribute(s)?", "Warning!", JOptionPane.WARNING_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+                for (int index : selected) {
+                    Attribute attribute = (Attribute) taAttributes.getValueAt(index, 0);
+                    element.getAttributes().remove(attribute);
+                    for (Key k : element.getKeys()) {
+                        k.getAttributes().remove(attribute);
+                    }
+                }
+                refreshTable();
+            }
+        }
+    }//GEN-LAST:event_bDeleteAttributeActionPerformed
     // <editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bCreateAttribute;
@@ -293,10 +360,13 @@ public class PElement extends javax.swing.JPanel {
         }
     }
 
-    private void setPackages() {
+    public void refreshPackages() {
+        nextgen.model.Package pac = (nextgen.model.Package) cbPackages.getSelectedItem();
+        cbPackages.removeAllItems();
         for (nextgen.model.Package p : project.getPackages().values()) {
             cbPackages.addItem(p);
         }
+        cbPackages.setSelectedItem(pac);
     }
 
     private void setParents() {
@@ -326,6 +396,7 @@ public class PElement extends javax.swing.JPanel {
         });
     }
 
+    // <editor-fold defaultstate="collapsed" desc="Model SetUp">
     private void setTableModels() {
         if (cbEntities == null) {
             cbEntities = new JComboBox<>();
@@ -372,9 +443,15 @@ public class PElement extends javax.swing.JPanel {
                         attribute.setRequired((Boolean) tableModel.getValueAt(e.getFirstRow(), e.getColumn()));
                         break;
                     case 5:
-                        attribute.setDefaultValue((String) tableModel.getValueAt(e.getFirstRow(), e.getColumn()));
+                        attribute.setAutoincrement((Boolean) tableModel.getValueAt(e.getFirstRow(), e.getColumn()));
                         break;
                     case 6:
+                        attribute.setCommonTable((String) tableModel.getValueAt(e.getFirstRow(), e.getColumn()));
+                        break;
+                    case 7:
+                        attribute.setDefaultValue((String) tableModel.getValueAt(e.getFirstRow(), e.getColumn()));
+                        break;
+                    case 8:
                         attribute.setComment((String) tableModel.getValueAt(e.getFirstRow(), e.getColumn()));
                         break;
                 }
@@ -386,14 +463,26 @@ public class PElement extends javax.swing.JPanel {
         listModel = new DefaultListModel<>();
         listKeys.setModel(listModel);
     }
+    // </editor-fold>
 
     private void refreshTable() {
-        if (tableModel.getRowCount() > 0){
+        if (tableModel.getRowCount() > 0) {
             tableModel.removeRow(0);
         }
-        for (Attribute attribute : element.getAttributes()){
+        for (Attribute attribute : element.getAttributes()) {
             tableModel.addRow(attribute.getRow());
         }
         NextGenHelper.adjustColumns(taAttributes);
+    }
+
+    public Element getElement() {
+        return element;
+    }
+
+    void refreshKeys() {
+        listModel.removeAllElements();
+        for (Key k : element.getKeys()) {
+            listModel.addElement(k);
+        }
     }
 }

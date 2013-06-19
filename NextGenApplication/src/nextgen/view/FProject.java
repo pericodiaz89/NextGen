@@ -1,13 +1,22 @@
 package nextgen.view;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
+import lib.GUIHelper;
+import nextgen.dao.DAO;
 import nextgen.model.Element;
+import nextgen.model.Entity;
 import nextgen.model.Package;
 import nextgen.model.Project;
 
@@ -16,6 +25,7 @@ public final class FProject extends javax.swing.JFrame {
     private Project project;
     private DefaultListModel<Element> model;
     private HashMap<String, nextgen.model.Package> packages;
+    private PElement pElement;
 
     public FProject() {
         this.project = new Project("", "");
@@ -24,6 +34,7 @@ public final class FProject extends javax.swing.JFrame {
         packages = new HashMap<>();
         model = new DefaultListModel<>();
         listElements.setModel(model);
+        setPackages();
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -46,11 +57,17 @@ public final class FProject extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         mNew = new javax.swing.JMenuItem();
-        mImport = new javax.swing.JMenuItem();
         mSave = new javax.swing.JMenuItem();
+        mLoad = new javax.swing.JMenuItem();
+        mImport = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
         mGenerate = new javax.swing.JMenuItem();
-        mAddPackage = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        mGenerate1 = new javax.swing.JMenuItem();
+        mGenerate2 = new javax.swing.JMenuItem();
+        mGenerate3 = new javax.swing.JMenuItem();
+        mGenerate4 = new javax.swing.JMenuItem();
+        mPackage = new javax.swing.JMenu();
+        mAddPackage = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("NextGen Application\n");
@@ -155,26 +172,63 @@ public final class FProject extends javax.swing.JFrame {
 
         jMenu1.setText("NextGen Functions");
 
+        mNew.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
         mNew.setText("New");
+        mNew.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mNewActionPerformed(evt);
+            }
+        });
         jMenu1.add(mNew);
 
-        mImport.setText("Import");
-        jMenu1.add(mImport);
-
+        mSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         mSave.setText("Save");
+        mSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mSaveActionPerformed(evt);
+            }
+        });
         jMenu1.add(mSave);
 
-        mGenerate.setText("Generate");
-        jMenu1.add(mGenerate);
+        mLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
+        mLoad.setText("Load");
+        jMenu1.add(mLoad);
+
+        mImport.setText("Import Entities From Project");
+        jMenu1.add(mImport);
+
+        jMenu2.setText("Generate Code");
+
+        mGenerate.setText("PHP/Mysql Simplified");
+        jMenu2.add(mGenerate);
+
+        mGenerate1.setText("PHP/Mysql Object Oriented");
+        jMenu2.add(mGenerate1);
+
+        mGenerate2.setText("Java Client");
+        jMenu2.add(mGenerate2);
+
+        mGenerate3.setText("Javascript Client");
+        jMenu2.add(mGenerate3);
+
+        mGenerate4.setText("Unity3D - C# Client");
+        jMenu2.add(mGenerate4);
+
+        jMenu1.add(jMenu2);
 
         jMenuBar1.add(jMenu1);
 
-        mAddPackage.setText("Packages");
+        mPackage.setText("Packages");
 
-        jMenuItem1.setText("Add Package");
-        mAddPackage.add(jMenuItem1);
+        mAddPackage.setText("Add Package");
+        mAddPackage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mAddPackageActionPerformed(evt);
+            }
+        });
+        mPackage.add(mAddPackage);
 
-        jMenuBar1.add(mAddPackage);
+        jMenuBar1.add(mPackage);
 
         setJMenuBar(jMenuBar1);
 
@@ -209,12 +263,13 @@ public final class FProject extends javax.swing.JFrame {
 
     private void listElementsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listElementsValueChanged
         int[] selected = listElements.getSelectedIndices();
-        if (selected.length == 0){
-        }else if (selected.length == 1){
+        if (selected.length == 0) {
+        } else if (selected.length == 1) {
             Element element = (Element) listElements.getSelectedValue();
-            PElement pElement = new PElement(this, element);
+            pElement = new PElement(this, element);
             spElements.setViewportView(pElement);
-        }else{
+        } else {
+            pElement = null;
             spElements.setViewportView(new JPanel());
         }
     }//GEN-LAST:event_listElementsValueChanged
@@ -222,7 +277,7 @@ public final class FProject extends javax.swing.JFrame {
     private void bAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bAddActionPerformed
         Element e = new Element("NewElement", "", "newelement");
         project.getElements().add(e);
-        if (PElement.cbEntities != null){
+        if (PElement.cbEntities != null) {
             PElement.cbEntities.addItem(e);
         }
         refreshElementList();
@@ -231,11 +286,11 @@ public final class FProject extends javax.swing.JFrame {
 
     private void bDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bDeleteActionPerformed
         int[] selected = listElements.getSelectedIndices();
-        if (selected.length > 0){
+        if (selected.length > 0) {
             int result = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete " + selected.length + " Element(s)?", "Warning!", JOptionPane.WARNING_MESSAGE);
-            if (result == JOptionPane.YES_OPTION){
-                for (int index : selected){
-                    project.getElements().remove((Element)listElements.getModel().getElementAt(index));
+            if (result == JOptionPane.YES_OPTION) {
+                for (int index : selected) {
+                    project.getElements().remove((Element) listElements.getModel().getElementAt(index));
                     PElement.cbEntities.removeItem(listElements.getModel().getElementAt(index));
                 }
                 refreshElementList();
@@ -248,6 +303,48 @@ public final class FProject extends javax.swing.JFrame {
         project.setDescription(tDescription.getText());
     }//GEN-LAST:event_bUpdateActionPerformed
 
+    private void mAddPackageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mAddPackageActionPerformed
+        DPackages p = new DPackages(this);
+        p.setVisible(true);
+    }//GEN-LAST:event_mAddPackageActionPerformed
+
+    private void mSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mSaveActionPerformed
+
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogType(JFileChooser.SAVE_DIALOG);
+        FileFilter f = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.getPath().matches(".+\\.ng") || pathname.isDirectory()) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public String getDescription() {
+                return "NextGen File";
+            }
+        };
+        fc.setFileFilter(f);
+        int retval = fc.showSaveDialog(null);
+        if (retval == JFileChooser.APPROVE_OPTION) {
+            try {
+                DAO d = new DAO();
+                d.saveProject(project, fc.getSelectedFile().getAbsolutePath());
+            } catch (Exception ex) {
+                Logger.getLogger(FProject.class.getName()).log(Level.SEVERE, null, ex);
+                GUIHelper.errorMessage(this, ex.getMessage());
+            }
+        }
+
+    }//GEN-LAST:event_mSaveActionPerformed
+
+    private void mNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mNewActionPerformed
+        project = new Project("new project", "");
+        refreshElementList();
+        packages.clear();
+    }//GEN-LAST:event_mNewActionPerformed
     // <editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAdd;
@@ -256,18 +353,24 @@ public final class FProject extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JList listElements;
-    private javax.swing.JMenu mAddPackage;
+    private javax.swing.JMenuItem mAddPackage;
     private javax.swing.JMenuItem mGenerate;
+    private javax.swing.JMenuItem mGenerate1;
+    private javax.swing.JMenuItem mGenerate2;
+    private javax.swing.JMenuItem mGenerate3;
+    private javax.swing.JMenuItem mGenerate4;
     private javax.swing.JMenuItem mImport;
+    private javax.swing.JMenuItem mLoad;
     private javax.swing.JMenuItem mNew;
+    private javax.swing.JMenu mPackage;
     private javax.swing.JMenuItem mSave;
     private javax.swing.JScrollPane spElements;
     private javax.swing.JTextArea tDescription;
@@ -277,11 +380,11 @@ public final class FProject extends javax.swing.JFrame {
 
     public void refreshElementList() {
         model.removeAllElements();
-        for (Element e : project.getElements()){
+        for (Element e : project.getElements()) {
             model.addElement(e);
-            if (!packages.containsKey(e.getPackage1().getName())){
+            if (!packages.containsKey(e.getPackage1().getName())) {
                 packages.put(e.getPackage1().getName(), e.getPackage1());
-            }else{
+            } else {
                 e.setPackage1(packages.get(e.getPackage1().getName()));
             }
         }
@@ -295,8 +398,24 @@ public final class FProject extends javax.swing.JFrame {
         return project;
     }
 
+    public void updatePackages(){
+        if (pElement != null){
+            pElement.refreshPackages();
+        }
+    }
+
     private void setData() {
         tName.setText(project.getName());
         tDescription.setText(project.getDescription());
+    }
+
+    private void setPackages() {
+        for (Element e : project.getElements()) {
+            if (packages.containsKey(e.getPackage1().getName())) {
+                e.setPackage1(packages.get(e.getPackage1().getName()));
+            } else {
+                packages.put(e.getPackage1().getName(), e.getPackage1());
+            }
+        }
     }
 }

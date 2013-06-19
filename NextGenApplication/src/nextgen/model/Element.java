@@ -4,6 +4,8 @@
  */
 package nextgen.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -35,6 +37,25 @@ public class Element extends Entity {
         attributes = new HashSet<>();
         keys = new HashSet<>();
     }
+
+    @Override
+    public HashMap<String, Object> toHashMap() {
+        HashMap<String, Object> map = super.toHashMap();
+        if (parent != null) {
+            map.put("parent", parent.getName());
+        }
+        map.put("tablename", tableName);
+        if (package1 != null) {
+            map.put("package", package1.toHashMap());
+        }
+        ArrayList<HashMap<String, Object>> atts = new ArrayList<>();
+        for (Attribute a : this.attributes) {
+            atts.add(a.toHashMap());
+        }
+        // Seguir
+        return map;
+    }
+
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
     public Element getParent() {

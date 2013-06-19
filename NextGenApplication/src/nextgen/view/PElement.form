@@ -241,16 +241,25 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Create"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bCreateKeyActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="bEditKey">
           <Properties>
             <Property name="text" type="java.lang.String" value="Edit"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bEditKeyActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="bDeleteKey">
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bDeleteKeyActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -273,6 +282,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Delete"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bDeleteAttributeActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
