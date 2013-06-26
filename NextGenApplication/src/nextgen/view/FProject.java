@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import lib.GUIHelper;
 import nextgen.dao.DAO;
+import nextgen.generator.PHPObjectOriented;
 import nextgen.model.Element;
 import nextgen.model.Entity;
 import nextgen.model.Package;
@@ -32,6 +33,7 @@ public final class FProject extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         packages = new HashMap<>();
+        packages.put("", new nextgen.model.Package("", ""));
         model = new DefaultListModel<>();
         listElements.setModel(model);
         setPackages();
@@ -203,6 +205,11 @@ public final class FProject extends javax.swing.JFrame {
         jMenu2.add(mGenerate);
 
         mGenerate1.setText("PHP/Mysql Object Oriented");
+        mGenerate1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mGenerate1ActionPerformed(evt);
+            }
+        });
         jMenu2.add(mGenerate1);
 
         mGenerate2.setText("Java Client");
@@ -345,6 +352,16 @@ public final class FProject extends javax.swing.JFrame {
         refreshElementList();
         packages.clear();
     }//GEN-LAST:event_mNewActionPerformed
+
+    private void mGenerate1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mGenerate1ActionPerformed
+        // TODO add your handling code here:
+        PHPObjectOriented php = new PHPObjectOriented();
+        try {
+            php.generate(project, "C:\\Users\\Mateo\\Proyectos\\prueba");
+        } catch (Exception ex) {
+            Logger.getLogger(FProject.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_mGenerate1ActionPerformed
     // <editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAdd;
@@ -382,6 +399,8 @@ public final class FProject extends javax.swing.JFrame {
         model.removeAllElements();
         for (Element e : project.getElements()) {
             model.addElement(e);
+            if (e.getPackage1() == null)
+                continue;
             if (!packages.containsKey(e.getPackage1().getName())) {
                 packages.put(e.getPackage1().getName(), e.getPackage1());
             } else {

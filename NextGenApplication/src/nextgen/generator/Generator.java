@@ -1,10 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package nextgen.generator;
+
+import nextgen.model.Project;
 
 public abstract class Generator {
 
-    public abstract void generate(String directory) throws Exception;
+    public abstract void generate(Project project, String directory) throws Exception;
 }

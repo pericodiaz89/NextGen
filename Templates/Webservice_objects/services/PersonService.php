@@ -17,6 +17,8 @@ class PersonService extends Service {
         if (checkParam(Person)) {
             $Person = $this->getPerson();
             return Person::create($Person);
+        }else{
+            return getErrorArray(03, "Parameters missing (Person)");
         }
     }
 
@@ -24,6 +26,8 @@ class PersonService extends Service {
         if (checkParam(Person)) {
             $Person = $this->getPerson();
             return Person::modify($Person);
+        }else{
+            return getErrorArray(03, "Parameters missing (Person)");
         }
     }
 
@@ -31,6 +35,8 @@ class PersonService extends Service {
         if (checkParam(Person)) {
             $Person = $this->getPerson();
             return Person::delete($Person);
+        }else{
+            return getErrorArray(03, "Parameters missing (Person)");
         }
     }
 

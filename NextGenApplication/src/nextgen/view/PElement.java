@@ -257,11 +257,7 @@ public final class PElement extends javax.swing.JPanel {
         element.setDescription(tDescription.getText());
         element.setTableName(tTableName.getText());
         element.setPackage1((Package) cbPackages.getSelectedItem());
-        if (cbParents.getSelectedIndex() > 0) {
-            element.setParent((Element) cbParents.getSelectedItem());
-        } else {
-            element.setParent(null);
-        }
+        element.setParent((Element) cbParents.getSelectedItem());
 
         project.refreshElementList();
     }//GEN-LAST:event_bUpdateActionPerformed
@@ -363,6 +359,7 @@ public final class PElement extends javax.swing.JPanel {
     public void refreshPackages() {
         nextgen.model.Package pac = (nextgen.model.Package) cbPackages.getSelectedItem();
         cbPackages.removeAllItems();
+        cbPackages.addItem(new Package("", ""));
         for (nextgen.model.Package p : project.getPackages().values()) {
             cbPackages.addItem(p);
         }
