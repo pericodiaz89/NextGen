@@ -9,7 +9,6 @@ package nextgen.model.enums;
  * @author Rodrigo
  */
 public enum Cardinality {
-
     Single,
     Multiple
 }

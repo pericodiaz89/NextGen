@@ -4,6 +4,8 @@
  */
 package nextgen.model;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import nextgen.model.enums.KeyType;
 
@@ -32,6 +34,20 @@ public class Key {
     @Override
     public String toString() {
         return name + " : " + type.toString();
+    }
+    
+    public HashMap<String, Object> toHashMap(){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("name", this.getName());
+        map.put("type", this.getType());
+        
+        ArrayList<HashMap<String, Object>> attributeList = new ArrayList<>();
+        for (Attribute a : this.attributes) {
+            attributeList.add(a.toHashMap());
+        }
+        map.put("attributes", attributeList);        
+        
+        return map;
     }
 
 
