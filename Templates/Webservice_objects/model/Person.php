@@ -1,4 +1,4 @@
-<?php
+<?php 
 class Person{
 
     private $id;
@@ -34,6 +34,7 @@ class Person{
     }
 
     // </editor-fold>
+
     // <editor-fold defaultstate="collapsed" desc="CRUD">
     public static function create($Person) {
         $id = mysqli_real_escape_string($Person->getId());

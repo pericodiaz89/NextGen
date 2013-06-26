@@ -16,11 +16,11 @@ public class Element extends Entity {
 
     private Element parent;
     private String tableName;
-    private Package package1;
+    private nextgen.model.Package package1;
     private HashSet<Attribute> attributes;
     private HashSet<Key> keys;
 
-    public Element(String name, String description, String tableName, Package package1, Element parent, HashSet<Attribute> attributes, HashSet<Key> keys) {
+    public Element(String name, String description, String tableName, nextgen.model.Package package1, Element parent, HashSet<Attribute> attributes, HashSet<Key> keys) {
         super(name, description);
         this.parent = parent;
         this.tableName = tableName;
@@ -102,7 +102,7 @@ public class Element extends Entity {
         return package1;
     }
 
-    public void setPackage1(Package package1) {
+    public void setPackage1(nextgen.model.Package package1) {
         this.package1 = package1;
     }
     // </editor-fold>
