@@ -1,11 +1,9 @@
 package nextgen.dao;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import lib.json.JSONArray;
-import lib.json.JSONException;
 import lib.json.JSONObject;
 import nextgen.model.Attribute;
 import nextgen.model.Element;
@@ -30,62 +28,62 @@ public class DAO {
 
     public Project getProjects(String dir) throws Exception {
         
+        //Read JSON
         JSONObject obj;
         obj = fileManager.loadData(dir);
         
-        System.out.println(obj.toString());
+        //Capture name and description project
         String nameProject = obj.getString("name");
         String descriptionProject = obj.getString("description");
 
+        //Capture elements project
         HashSet<Element> elementList = new HashSet<>();        
         JSONArray elements = obj.getJSONArray("elements");
         
+        //Cycle for each element
         for (int i = 0; i < elements.length(); i++) {
             
+            //Capture keys element
             JSONObject elem = elements.getJSONObject(i);            
             JSONArray keys = elem.getJSONArray("keys");
             
             HashSet<Key> keysList = new HashSet<>();    
             
             if (keys != null) {
-                //DUDA PARA RODRIGO, creo que la segunda KEYS es attributes
+                //Cycle for each key
                 for (int j = 0; j < elements.length(); j++) {
                     JSONObject eachKey = keys.getJSONObject(j);
                     
+                    //Capture key information
                     String keyName = eachKey.getString("name");
-                    String k = eachKey.getJSONObject("type").toString();
+                    String k = eachKey.getJSONObject("type").toString();                    
+                    KeyType keyType = (k.equals("Primary")) ? KeyType.Primary : KeyType.Unique;                    
                     
-                    KeyType keyType;
-                    if (k.equals("Primary")) {
-                        keyType = KeyType.Primary;
-                    } else {
-                        keyType = KeyType.Unique;
-                    }
-                    
+                    //Attributes
                     JSONArray attributes = elem.getJSONArray("attributes");
-                    HashSet<Attribute> attributeList = getAttribute(attributes);
+                    HashSet<Attribute> attributeList = getAttributes(attributes);
                     
-                    if(attributeList == null){
-                        keysList.add(new Key(keyName, keyType));
-                    }else{
-                        keysList.add(new Key(keyName, keyType, attributeList));
-                    }
+                    //Add key List
+                    keysList.add((attributeList == null) ? new Key(keyName, keyType) : new Key(keyName, keyType, attributeList));                                        
                 }                
             }
             
+            //Capture information element
             String descriptionElement = elem.getString("description");
             String tableNameElement = elem.getString("tablename");
             String nameElement = elem.getString("name");
-
+            
+            //Package
             JSONObject packageElem = elem.getJSONObject("package");
             String descriptionPackage = packageElem.getString("description");
             String namePackage = packageElem.getString("name");
-
             Package packageElement = new Package(namePackage, descriptionPackage);
-
+            
+            //Attributes
             JSONArray attributes = elem.getJSONArray("attributes");
-            HashSet<Attribute> attributeList = getAttribute(attributes);
-                                    
+            HashSet<Attribute> attributeList = getAttributes(attributes);
+            
+            //Add to element list
             elementList.add(new Element(nameElement, descriptionElement, tableNameElement, packageElement, null, attributeList, keysList));
 
         }        
@@ -93,33 +91,31 @@ public class DAO {
 
     }
     
-    private HashSet<Attribute> getAttribute(JSONArray attributes) throws Exception{
-        
+    private HashSet<Attribute> getAttributes(JSONArray attributes) throws Exception{        
         HashSet<Attribute> attributeList = new HashSet<>();
         if (attributes != null) {
             for (int k = 0; k < attributes.length(); k++) {
+                //Capture Attribute information                
                 JSONObject attr = attributes.getJSONObject(k);
                 String autoIncrement = attr.getString("autoincrement");
                 String nameAttr = attr.getString("name");
-
+                
+                //Entity
                 JSONObject entity = attr.getJSONObject("entity");
                 String descriptionEntity = entity.getString("description");
                 String nameEntity = entity.getString("name");
 
                 Entity entityModel = new Entity(nameEntity, descriptionEntity);
-
+                
                 String commonTable = attr.getString("commonTable");
                 String required = attr.getString("required");
                 String comment = attr.getString("comment");
                 String defaultValue = attr.getString("defaultValue");
+                
                 String cardinality = attr.getJSONObject("cardinality").toString();
-
-                Cardinality c;
-                if (cardinality.equals("Multiple")) {
-                    c = Cardinality.Multiple;
-                } else {
-                    c = Cardinality.Single;
-                }
+                Cardinality c = (cardinality.equals("Multiple")) ? Cardinality.Multiple : Cardinality.Single;
+                
+                //Add attribute List
                 attributeList.add(new Attribute(1, nameAttr, entityModel, c, Boolean.parseBoolean(required), comment, defaultValue, Boolean.parseBoolean(autoIncrement), commonTable));
             }
         }else{
