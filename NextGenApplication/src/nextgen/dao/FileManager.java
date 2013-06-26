@@ -16,16 +16,22 @@ import lib.json.JSONObject;
  * @author Rodrigo
  */
 public class FileManager {
-    
+
     public JSONObject loadData(String fileName) throws Exception {
         //http://codigomaldito.blogspot.com/2011/06/como-leer-un-archivo-de-texto-en-java.html
-        DataInputStream in = new DataInputStream(new FileInputStream(fileName));        
-        BufferedReader buffer = new BufferedReader(new InputStreamReader(in));                
-        JSONObject obj = new JSONObject(buffer.readLine());        
-        in.close();                
+        DataInputStream in = new DataInputStream(new FileInputStream(fileName));
+        BufferedReader buffer = new BufferedReader(new InputStreamReader(in));
+        StringBuilder jsonFormat = new StringBuilder();
+        String strLinea;
+        while ((strLinea = buffer.readLine()) != null) {
+            jsonFormat.append(strLinea);
+        }
+
+        JSONObject obj = new JSONObject(jsonFormat.toString());
+        in.close();
         return obj;
     }
-    
+
     public void saveData(JSONObject object, String fileName) throws Exception {
         try (FileWriter file = new FileWriter(fileName)) {
             file.write(object.toString());

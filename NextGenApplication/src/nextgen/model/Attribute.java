@@ -41,6 +41,7 @@ public class Attribute {
 
     public HashMap<String, Object> toHashMap() {
         HashMap<String, Object> attributes = new HashMap<>();
+        attributes.put("id", this.getId());
         attributes.put("name", this.getName());
         attributes.put("entity", this.getEntity().toHashMap());
         attributes.put("cardinality", this.getCardinality());
@@ -49,7 +50,7 @@ public class Attribute {
         attributes.put("defaultValue", this.getDefaultValue());
         attributes.put("autoincrement", this.isAutoincrement());
         attributes.put("commonTable", this.getCommonTable());
-        
+
         return attributes;
     }
 

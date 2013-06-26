@@ -35,18 +35,18 @@ public class Key {
     public String toString() {
         return name + " : " + type.toString();
     }
-    
+
     public HashMap<String, Object> toHashMap(){
         HashMap<String, Object> map = new HashMap<>();
         map.put("name", this.getName());
         map.put("type", this.getType());
-        
-        ArrayList<HashMap<String, Object>> attributeList = new ArrayList<>();
+
+        ArrayList<Integer> attributeList = new ArrayList<>();
         for (Attribute a : this.attributes) {
-            attributeList.add(a.toHashMap());
+            attributeList.add(a.getId());
         }
-        map.put("attributes", attributeList);        
-        
+        map.put("attributes", attributeList);
+
         return map;
     }
 

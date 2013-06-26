@@ -192,6 +192,11 @@ public final class FProject extends javax.swing.JFrame {
 
         mLoad.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
         mLoad.setText("Load");
+        mLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mLoadActionPerformed(evt);
+            }
+        });
         jMenu1.add(mLoad);
 
         mImport.setText("Import Entities From Project");
@@ -326,6 +331,7 @@ public final class FProject extends javax.swing.JFrame {
                 return "NextGen File";
             }
         };
+
         fc.setFileFilter(f);
         int retval = fc.showSaveDialog(null);
         if (retval == JFileChooser.APPROVE_OPTION) {
@@ -337,7 +343,6 @@ public final class FProject extends javax.swing.JFrame {
                 GUIHelper.errorMessage(this, ex.getMessage());
             }
         }
-
     }//GEN-LAST:event_mSaveActionPerformed
 
     private void mNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mNewActionPerformed
@@ -345,6 +350,40 @@ public final class FProject extends javax.swing.JFrame {
         refreshElementList();
         packages.clear();
     }//GEN-LAST:event_mNewActionPerformed
+
+    private void mLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mLoadActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogType(JFileChooser.OPEN_DIALOG);
+        FileFilter f = new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                if (pathname.getPath().matches(".+\\.ng") || pathname.isDirectory()) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public String getDescription() {
+                return "NextGen File";
+            }
+        };
+        fc.setFileFilter(f);
+        int retval = fc.showOpenDialog(null);
+        if (retval == JFileChooser.APPROVE_OPTION) {
+            try {
+                DAO d = new DAO();
+                project = d.getProject(fc.getSelectedFile().getAbsolutePath());
+                setData();
+                setPackages();
+                refreshElementList();
+            } catch (Exception ex) {
+                Logger.getLogger(FProject.class.getName()).log(Level.SEVERE, null, ex);
+                GUIHelper.errorMessage(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_mLoadActionPerformed
+
     // <editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAdd;
@@ -382,20 +421,15 @@ public final class FProject extends javax.swing.JFrame {
         model.removeAllElements();
         for (Element e : project.getElements()) {
             model.addElement(e);
+            if (e.getPackage1() == null) {
+                continue;
+            }
             if (!packages.containsKey(e.getPackage1().getName())) {
                 packages.put(e.getPackage1().getName(), e.getPackage1());
             } else {
                 e.setPackage1(packages.get(e.getPackage1().getName()));
             }
         }
-    }
-
-    public HashMap<String, Package> getPackages() {
-        return packages;
-    }
-
-    public Project getProject() {
-        return project;
     }
 
     public void updatePackages(){
@@ -411,6 +445,9 @@ public final class FProject extends javax.swing.JFrame {
 
     private void setPackages() {
         for (Element e : project.getElements()) {
+            if (e.getPackage1() == null) {
+                continue;
+            }
             if (packages.containsKey(e.getPackage1().getName())) {
                 e.setPackage1(packages.get(e.getPackage1().getName()));
             } else {
@@ -418,4 +455,14 @@ public final class FProject extends javax.swing.JFrame {
             }
         }
     }
+
+    // <editor-fold defaultstate="collapsed" desc="Get and Sets">
+    public HashMap<String, Package> getPackages() {
+        return packages;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+    // </editor-fold>
 }

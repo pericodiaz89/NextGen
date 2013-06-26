@@ -41,28 +41,29 @@ public class Element extends Entity {
     @Override
     public HashMap<String, Object> toHashMap() {
         HashMap<String, Object> map = super.toHashMap();
-        
-        if (parent != null){
+        if (parent != null) {
             map.put("parent", parent.getName());
         }
+
         map.put("tablename", tableName);
-        map.put("package", package1.toHashMap());
-        
+        if (package1 != null) {
+            map.put("package", package1.toHashMap());
+        }
+
         ArrayList<HashMap<String, Object>> attributeList = new ArrayList<>();
         for (Attribute a : this.attributes) {
             attributeList.add(a.toHashMap());
         }
         map.put("attributes", attributeList);
-        
+
         ArrayList<HashMap<String, Object>> keyList = new ArrayList<>();
         for (Key a : this.keys) {
             keyList.add(a.toHashMap());
         }
         map.put("keys", keyList);
-        
+
         return map;
     }
-
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
     public Element getParent() {
@@ -104,7 +105,5 @@ public class Element extends Entity {
     public void setPackage1(Package package1) {
         this.package1 = package1;
     }
-
     // </editor-fold>
-
 }

@@ -1,5 +1,7 @@
 package nextgen.dao;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,104 +23,123 @@ import nextgen.model.enums.KeyType;
 public class DAO {
 
     private FileManager fileManager;
+    private HashMap<Integer, Attribute> attributeMap;
+    private HashMap<String, Entity> entityMap;
+    private HashMap<Entity, ArrayList<Attribute>> entityUsed;
 
-    public DAO(){
+    public DAO() {
         fileManager = new FileManager();
     }
 
-    public Project getProjects(String dir) throws Exception {
-        
+    public Project getProject(String dir) throws Exception {
+        attributeMap = new HashMap<>();
+        entityMap = new HashMap<>();
+        entityUsed = new HashMap<>();
         //Read JSON
         JSONObject obj;
         obj = fileManager.loadData(dir);
-        
+
         //Capture name and description project
         String nameProject = obj.getString("name");
         String descriptionProject = obj.getString("description");
 
         //Capture elements project
-        HashSet<Element> elementList = new HashSet<>();        
+        HashSet<Element> elementList = new HashSet<>();
         JSONArray elements = obj.getJSONArray("elements");
-        
+
         //Cycle for each element
         for (int i = 0; i < elements.length(); i++) {
-            
-            //Capture keys element
-            JSONObject elem = elements.getJSONObject(i);            
-            JSONArray keys = elem.getJSONArray("keys");
-            
-            HashSet<Key> keysList = new HashSet<>();    
-            
-            if (keys != null) {
-                //Cycle for each key
-                for (int j = 0; j < elements.length(); j++) {
-                    JSONObject eachKey = keys.getJSONObject(j);
-                    
-                    //Capture key information
-                    String keyName = eachKey.getString("name");
-                    String k = eachKey.getJSONObject("type").toString();                    
-                    KeyType keyType = (k.equals("Primary")) ? KeyType.Primary : KeyType.Unique;                    
-                    
-                    //Attributes
-                    JSONArray attributes = elem.getJSONArray("attributes");
-                    HashSet<Attribute> attributeList = getAttributes(attributes);
-                    
-                    //Add key List
-                    keysList.add((attributeList == null) ? new Key(keyName, keyType) : new Key(keyName, keyType, attributeList));                                        
-                }                
-            }
-            
+            JSONObject elem = elements.getJSONObject(i);
             //Capture information element
             String descriptionElement = elem.getString("description");
             String tableNameElement = elem.getString("tablename");
             String nameElement = elem.getString("name");
-            
+
+            // <editor-fold defaultstate="collapsed" desc="Key">
+            //Capture keys element
+            JSONArray keys = elem.getJSONArray("keys");
+
+            HashSet<Key> keysList = new HashSet<>();
+            if (keys != null) {
+                //Cycle for each key
+                for (int j = 0; j < elements.length(); j++) {
+                    JSONObject eachKey = keys.getJSONObject(j);
+
+                    //Capture key information
+                    String keyName = eachKey.getString("name");
+                    String k = eachKey.getJSONObject("type").toString();
+                    KeyType keyType = (k.equals("Primary")) ? KeyType.Primary : KeyType.Unique;
+
+                    Key key = new Key(keyName, keyType);
+                    //Attributes
+                    JSONArray attributes = eachKey.getJSONArray("attributes");
+
+                    for (int l = 0; l < attributes.length(); l++) {
+                        int id = attributes.getInt(l);
+                        if (attributeMap.containsKey(id)) {
+                            key.getAttributes().add(attributeMap.get(id));
+                        }
+                    }
+                    keysList.add(key);
+
+                }
+            }
+            // </editor-fold>
+
+            Package packageElement = null;
             //Package
-            JSONObject packageElem = elem.getJSONObject("package");
-            String descriptionPackage = packageElem.getString("description");
-            String namePackage = packageElem.getString("name");
-            Package packageElement = new Package(namePackage, descriptionPackage);
-            
+            if (elem.has("package")) {
+                JSONObject packageElem = elem.getJSONObject("package");
+                String descriptionPackage = packageElem.getString("description");
+                String namePackage = packageElem.getString("name");
+                packageElement = new Package(namePackage, descriptionPackage);
+            }
+
             //Attributes
             JSONArray attributes = elem.getJSONArray("attributes");
             HashSet<Attribute> attributeList = getAttributes(attributes);
-            
+
             //Add to element list
             elementList.add(new Element(nameElement, descriptionElement, tableNameElement, packageElement, null, attributeList, keysList));
-
-        }        
+        }
         return new Project(nameProject, descriptionProject, elementList);
-
     }
-    
-    private HashSet<Attribute> getAttributes(JSONArray attributes) throws Exception{        
+
+    private HashSet<Attribute> getAttributes(JSONArray attributes) throws Exception {
         HashSet<Attribute> attributeList = new HashSet<>();
         if (attributes != null) {
+
             for (int k = 0; k < attributes.length(); k++) {
-                //Capture Attribute information                
+                //Capture Attribute information
                 JSONObject attr = attributes.getJSONObject(k);
                 String autoIncrement = attr.getString("autoincrement");
                 String nameAttr = attr.getString("name");
-                
+                int id = attr.getInt("id");
+
                 //Entity
                 JSONObject entity = attr.getJSONObject("entity");
                 String descriptionEntity = entity.getString("description");
                 String nameEntity = entity.getString("name");
-
-                Entity entityModel = new Entity(nameEntity, descriptionEntity);
-                
+                Entity entityModel;
+                if (entityMap.containsKey(nameEntity)) {
+                    entityModel = entityMap.get(nameEntity);
+                } else {
+                    entityModel = new Entity(nameEntity, descriptionEntity);
+                    entityMap.put(nameEntity, entityModel);
+                }
                 String commonTable = attr.getString("commonTable");
                 String required = attr.getString("required");
                 String comment = attr.getString("comment");
                 String defaultValue = attr.getString("defaultValue");
-                
+
                 String cardinality = attr.getJSONObject("cardinality").toString();
                 Cardinality c = (cardinality.equals("Multiple")) ? Cardinality.Multiple : Cardinality.Single;
-                
+                Attribute attribute = new Attribute(id, nameAttr, entityModel, c, Boolean.parseBoolean(required), comment, defaultValue, Boolean.parseBoolean(autoIncrement), commonTable);
+                attributeMap.put(attribute.getId(), attribute);
                 //Add attribute List
-                attributeList.add(new Attribute(1, nameAttr, entityModel, c, Boolean.parseBoolean(required), comment, defaultValue, Boolean.parseBoolean(autoIncrement), commonTable));
+                attributeList.add(attribute);
             }
-        }else{
+        } else {
             return null;
         }
         return attributeList;
@@ -126,15 +147,18 @@ public class DAO {
 
     public void saveProject(Project project, String path) throws Exception {
         JSONObject obj = new JSONObject(project.toHashMap());
-        fileManager.saveData(obj, path + project.getName() + ".ng");
+        if (!path.matches(".*\\.ng")) {
+            path += ".ng";
+        }
+        fileManager.saveData(obj, path);
     }
 
     public static void main(String[] args) {
         DAO dao = new DAO();
 
         try {
-            Project p = dao.getProjects("src/nextgen/files/test.ng");
-            System.out.println(p.toHashMap().toString());            
+            Project p = dao.getProject("src/nextgen/files/test.ng");
+            System.out.println(p.toHashMap().toString());
         } catch (Exception ex) {
             Logger.getLogger(DAO.class.getName()).log(Level.SEVERE, null, ex);
         }
