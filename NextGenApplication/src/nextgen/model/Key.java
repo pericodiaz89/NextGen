@@ -45,7 +45,7 @@ public class Key {
         for (Attribute a : this.attributes) {
             attributeList.add(a.toHashMap());
         }
-        map.put("keys", attributeList);        
+        map.put("attributes", attributeList);        
         
         return map;
     }
