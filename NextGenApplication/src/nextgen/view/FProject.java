@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import lib.GUIHelper;
 import nextgen.dao.DAO;
+import nextgen.generator.PHPObjectOriented;
 import nextgen.model.Element;
 import nextgen.model.Entity;
 import nextgen.model.Package;
@@ -62,7 +63,7 @@ public final class FProject extends javax.swing.JFrame {
         mImport = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mGenerate = new javax.swing.JMenuItem();
-        mGenerate1 = new javax.swing.JMenuItem();
+        mPhpOO = new javax.swing.JMenuItem();
         mGenerate2 = new javax.swing.JMenuItem();
         mGenerate3 = new javax.swing.JMenuItem();
         mGenerate4 = new javax.swing.JMenuItem();
@@ -207,8 +208,13 @@ public final class FProject extends javax.swing.JFrame {
         mGenerate.setText("PHP/Mysql Simplified");
         jMenu2.add(mGenerate);
 
-        mGenerate1.setText("PHP/Mysql Object Oriented");
-        jMenu2.add(mGenerate1);
+        mPhpOO.setText("PHP/Mysql Object Oriented");
+        mPhpOO.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mPhpOOActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mPhpOO);
 
         mGenerate2.setText("Java Client");
         jMenu2.add(mGenerate2);
@@ -384,6 +390,37 @@ public final class FProject extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mLoadActionPerformed
 
+    private void mPhpOOActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mPhpOOActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogType(JFileChooser.SAVE_DIALOG);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//        FileFilter f = new FileFilter() {
+//            @Override
+//            public boolean accept(File pathname) {
+//                if (pathname.isDirectory()) {
+//                    return true;
+//                }
+//                return false;
+//            }
+//
+//            @Override
+//            public String getDescription() {
+//                return "NextGen File";
+//            }
+//        };
+        //fc.setFileFilter(f);
+        int retval = fc.showDialog(null, "Generate");
+        if (retval == JFileChooser.APPROVE_OPTION) {
+            try {
+                PHPObjectOriented po = new PHPObjectOriented();
+                po.generate(project, fc.getSelectedFile().getAbsolutePath());
+            } catch (Exception ex) {
+                Logger.getLogger(FProject.class.getName()).log(Level.SEVERE, null, ex);
+                GUIHelper.errorMessage(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_mPhpOOActionPerformed
+
     // <editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAdd;
@@ -402,7 +439,6 @@ public final class FProject extends javax.swing.JFrame {
     private javax.swing.JList listElements;
     private javax.swing.JMenuItem mAddPackage;
     private javax.swing.JMenuItem mGenerate;
-    private javax.swing.JMenuItem mGenerate1;
     private javax.swing.JMenuItem mGenerate2;
     private javax.swing.JMenuItem mGenerate3;
     private javax.swing.JMenuItem mGenerate4;
@@ -410,6 +446,7 @@ public final class FProject extends javax.swing.JFrame {
     private javax.swing.JMenuItem mLoad;
     private javax.swing.JMenuItem mNew;
     private javax.swing.JMenu mPackage;
+    private javax.swing.JMenuItem mPhpOO;
     private javax.swing.JMenuItem mSave;
     private javax.swing.JScrollPane spElements;
     private javax.swing.JTextArea tDescription;

@@ -39,7 +39,7 @@ public class Key {
     public HashMap<String, Object> toHashMap(){
         HashMap<String, Object> map = new HashMap<>();
         map.put("name", this.getName());
-        map.put("type", this.getType());
+        map.put("type", this.getType().toString());
 
         ArrayList<Integer> attributeList = new ArrayList<>();
         for (Attribute a : this.attributes) {

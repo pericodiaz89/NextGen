@@ -57,12 +57,12 @@
                     <Property name="text" type="java.lang.String" value="PHP/Mysql Simplified"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="mGenerate1">
+                <MenuItem class="javax.swing.JMenuItem" name="mPhpOO">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="PHP/Mysql Object Oriented"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mGenerate1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mPhpOOActionPerformed"/>
                   </Events>
                 </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="mGenerate2">

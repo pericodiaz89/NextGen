@@ -32,7 +32,6 @@ public class DAO {
     }
 
     public Project getProject(String dir) throws Exception {
-        attributeMap = new HashMap<>();
         entityMap = new HashMap<>();
         entityUsed = new HashMap<>();
         //Read JSON
@@ -49,11 +48,16 @@ public class DAO {
 
         //Cycle for each element
         for (int i = 0; i < elements.length(); i++) {
+            attributeMap = new HashMap<>();
             JSONObject elem = elements.getJSONObject(i);
             //Capture information element
             String descriptionElement = elem.getString("description");
             String tableNameElement = elem.getString("tablename");
             String nameElement = elem.getString("name");
+
+            //Attributes
+            JSONArray attributes = elem.getJSONArray("attributes");
+            HashSet<Attribute> attributeList = getAttributes(attributes);
 
             // <editor-fold defaultstate="collapsed" desc="Key">
             //Capture keys element
@@ -62,20 +66,20 @@ public class DAO {
             HashSet<Key> keysList = new HashSet<>();
             if (keys != null) {
                 //Cycle for each key
-                for (int j = 0; j < elements.length(); j++) {
+                for (int j = 0; j < keys.length(); j++) {
                     JSONObject eachKey = keys.getJSONObject(j);
 
                     //Capture key information
                     String keyName = eachKey.getString("name");
-                    String k = eachKey.getJSONObject("type").toString();
+                    String k = eachKey.getString("type");
                     KeyType keyType = (k.equals("Primary")) ? KeyType.Primary : KeyType.Unique;
 
                     Key key = new Key(keyName, keyType);
                     //Attributes
-                    JSONArray attributes = eachKey.getJSONArray("attributes");
+                    JSONArray attributesArray = eachKey.getJSONArray("attributes");
 
-                    for (int l = 0; l < attributes.length(); l++) {
-                        int id = attributes.getInt(l);
+                    for (int l = 0; l < attributesArray.length(); l++) {
+                        int id = attributesArray.getInt(l);
                         if (attributeMap.containsKey(id)) {
                             key.getAttributes().add(attributeMap.get(id));
                         }
@@ -94,10 +98,6 @@ public class DAO {
                 String namePackage = packageElem.getString("name");
                 packageElement = new Package(namePackage, descriptionPackage);
             }
-
-            //Attributes
-            JSONArray attributes = elem.getJSONArray("attributes");
-            HashSet<Attribute> attributeList = getAttributes(attributes);
 
             //Add to element list
             elementList.add(new Element(nameElement, descriptionElement, tableNameElement, packageElement, null, attributeList, keysList));

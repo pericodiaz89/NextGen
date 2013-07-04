@@ -1,17 +1,12 @@
 package nextgen.generator;
 
-import java.io.File;
-import java.io.PrintWriter;
-import java.util.List;
 import java.util.Set;
-import javax.print.DocFlavor;
 import nextgen.model.Element;
 import nextgen.model.Project;
 import nextgen.dao.FileManager;
 import nextgen.model.Attribute;
 import nextgen.model.Key;
 import nextgen.model.enums.KeyType;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 /**
  *
@@ -90,18 +85,18 @@ public class PHPObjectOriented extends Generator {
                         + "\n\n\t public function set%s($%s){"
                         + "\n\t\t$this->%s = $%s;"
                         + "\n\t}", capitalize(name), name, capitalize(name), name, name, name);
-                sqlComp = String.format(sqlComp + "\n\t\t $%s = mysqli_real_escape_string($%s->get%s());", name, capitalize(name), name);
+                sqlComp = String.format(sqlComp + "\n\t\t $%s = $mysql->checkVariable($%s->get%s());", name, e.getName(), capitalize(name));
             }
 
             php = String.format(php + "\n\n function __construct(%s){"
                     + "%s"
                     + "\n\t}"
                     + "\n "
-                    + "\n\t public static function get($object){"
-                    + "\n\t\t if(property_exists($object, \"%s\")){"
-                    + "\n\t\t\t $object = $object->%s;"
-                    + "\n\t\t }"
-                    + "\n\t\t return new %s (%s);"
+                    + "\n\tpublic static function get($object){"
+                    + "\n\t\tif(property_exists($object, \"%s\")){"
+                    + "\n\t\t\t$object = $object->%s;"
+                    + "\n\t\t}"
+                    + "\n\t\treturn new %s (%s);"
                     + "\n\t}"
                     + "\n"
                     + "\n\t// <editor-fold defaultstate=\"collapsed\" desc=\"Get and Set\">"
@@ -125,8 +120,9 @@ public class PHPObjectOriented extends Generator {
                 where = String.format(where+"`%s` = '$%s'", a.getName(),a.getName());
             }
             php = String.format(php + "\n\n\t public static function create($%s){"
+                    + "\n\t\t$mysql = MysqlDBC::getInstance();"
                     + "\n\t\t%s"
-                    + "\n\t\treturn MysqlDBC::getInstance()->insert("
+                    + "\n\t\treturn $mysql->insert("
                     + "\n\t\t\t\t \" INSERT INTO `%s` (", e.getName(), sqlComp, e.getTableName());
             first = true;
             for (Attribute a : e.getAttributes()) {
@@ -140,27 +136,28 @@ public class PHPObjectOriented extends Generator {
             first = true;
             for (Attribute a : e.getAttributes()) {
                 if (first) {
-                    php = String.format(php + ") VALUES ('%s'", a.getName());
+                    php = String.format(php + ") VALUES ('$%s'", a.getName());
                     first = false;
                 } else {
-                    php = String.format(php + ",'%s'", a.getName());
+                    php = String.format(php + ",'$%s'", a.getName());
                 }
             }
             php = String.format(php + ")\""
                     + "\n\t\t);"
                     + "\n\t}"
                     + "\n\n\t public static function modify($%s){"
-                    + "\n\t\t %s"
-                    + "\n\t\t return MysqlDBC::getInstance()->insert("
+                    + "\n\t\t$mysql = MysqlDBC::getInstance();"
+                    + "\n\t\t%s"
+                    + "\n\t\t return $mysql->update("
                     + "\n\t\t\t\t\"UPDATE `%s` SET", e.getName(), sqlComp, e.getTableName());
             first = true;
             for (Attribute a : e.getAttributes()) {
                 if (!where.matches(".*"+a.getName()+".*")) {
                     if (first) {
-                        php = String.format(php + "`%s`='%s'", a.getName(), a.getName());
+                        php = String.format(php + "`%s`='$%s'", a.getName(), a.getName());
                         first = false;
                     } else {
-                        php = String.format(php + ",`%s`='%s'", a.getName(), a.getName());
+                        php = String.format(php + ",`%s`='$%s'", a.getName(), a.getName());
                     }
                 }
             }
@@ -168,8 +165,9 @@ public class PHPObjectOriented extends Generator {
                     + "\n\t\t );"
                     + "\n\t}"
                     + "\n\n\t public static function delete($%s){"
+                    + "\n\t\t$mysql = MysqlDBC::getInstance();"
                     + "\n\t\t%s"
-                    + "\n\t\t return MysqlDBC::getInstance()->delete("
+                    + "\n\t\t return $mysql->delete("
                     + "\"DELETE FROM `%s` WHERE %s LIMIT 1\""
                     + "\n\t\t);"
                     + "\n\t}"
@@ -182,13 +180,13 @@ public class PHPObjectOriented extends Generator {
                     + "\n\t\t}"
                     + "\n\t\t// </editor-fold>"
                     + "\n\t\t// <editor-fold defaultstate=\"collapsed\" desc=\"Where\">"
-                    + "\n\t\t $where = \"\";"
-                    + "\n\t\t if (is_array($filters) && count($filters) > 0) {"
-                    + "\n\t\t\t $where = \" WHERE \";"
-                    + "\n\t\t\t $keys = array_keys($filters);"
-                    + "\n\t\t\t  for ($i = 0; $i < count($keys); $i++) {"
-                    + "\n\t\t\t\t $where .= \"%s.\" . $keys[$i] . \" = \" . $filters[$keys[$i]];"
-                    + "\n\t\t\t\t if ($i < count($keys) - 1) {"
+                    + "\n\t\t$where = \"\";"
+                    + "\n\t\tif (is_array($filters) && count($filters) > 0) {"
+                    + "\n\t\t\t$where = \" WHERE \";"
+                    + "\n\t\t\t$keys = array_keys($filters);"
+                    + "\n\t\t\tfor ($i = 0; $i < count($keys); $i++) {"
+                    + "\n\t\t\t\t$where .= \"%s.\" . $keys[$i] . \" = \" . $filters[$keys[$i]];"
+                    + "\n\t\t\t\tif ($i < count($keys) - 1) {"
                     + "\n\t\t\t\t\t $where .= \" AND \";"
                     + "\n\t\t\t\t }"
                     + "\n\t\t\t }"
@@ -240,7 +238,7 @@ public class PHPObjectOriented extends Generator {
                     + "\n define('%s', '%s');"
                     + "\n class %sService extends Service {"
                     + "\n\n\t public function includeSpecificFiles() {"
-                    + "\n\t\t include('../model/%s'"
+                    + "\n\t\t include('../model/%s');"
                     + "\n\t }"
                     + "\n\n\t public function create() {"
                     + "\n\t\t if (checkParam(%s)) {"
@@ -251,7 +249,7 @@ public class PHPObjectOriented extends Generator {
                     + "\n\t\t }"
                     + "\n\t }"
                     + "\n\n\t public function modify() {"
-                    + "\n\t\t if (checkParam($s)) {"
+                    + "\n\t\t if (checkParam(%s)) {"
                     + "\n\t\t\t $%s = $this->get%s();"
                     + "\n\t\t\t return %s::modify($%s);"
                     + "\n\t\t }else{"
@@ -259,7 +257,7 @@ public class PHPObjectOriented extends Generator {
                     + "\n\t\t }"
                     + "\n\t }"
                     + "\n\n\t public function delete() {"
-                    + "\n\t\t if (checkParam(%s))"
+                    + "\n\t\t if (checkParam(%s)){"
                     + "\n\t\t\t $%s = $this->get%s();"
                     + "\n\t\t\t return %s::delete($%s);"
                     + "\n\t\t }else{"
@@ -286,7 +284,7 @@ public class PHPObjectOriented extends Generator {
                     + "\n ?>",
                     e.getName(),e.getName(),e.getName(),dir,e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),
                     e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),
-                    e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),e.getName(),e.getName());
+                    e.getName(), e.getName(), e.getName(), e.getName(), e.getName(), e.getName(), e.getName(), e.getName(), e.getName(), e.getName());
             if (e.getPackage1() == null) {
                 FileManager.generateFile(directory+"/services/"+e.getName()+"Service.php", php);
             }else{
@@ -294,7 +292,7 @@ public class PHPObjectOriented extends Generator {
             }
         }
     }
-    
+
     public static String capitalize(String text){
         return text.substring(0,1).toUpperCase() + text.substring(1);
     }

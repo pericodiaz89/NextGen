@@ -92,6 +92,10 @@ class MysqlDBC {
     public function getRowCount($result) {
         return mysqli_num_rows($result);
     }
+
+    public function checkVariable($variable) {
+        return mysqli_escape_string($this->connection, $variable);
+    }
 }
 
 ?>
