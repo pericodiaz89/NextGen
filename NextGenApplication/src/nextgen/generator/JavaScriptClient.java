@@ -19,13 +19,12 @@ public class JavaScriptClient extends Generator {
         this.project = project;
         this.directory = directory;
         String js = createDictionary() + "\n" + createModel() + "\n" + createCall();
-        FileManager.generateFile(directory + "/Point.js", js);;
-
+        FileManager.generateFile(directory + "/" + project.getName() + ".js", js);
     }
 
     public String createDictionary() {
         String js = " // <editor-fold defaultstate=\"collapsed\" desc=\"Dictionary\">";
-        js += "/nurlbase = ''// Webservice Base";
+        js += "\nvar urlbase = '';// Webservice Base";
         for (Element e : project.getElements()) {
             js += "\nvar " + e.getName()+"s =  new Array();";
         }
@@ -71,7 +70,7 @@ public class JavaScriptClient extends Generator {
                     + "\n%s.get = function(pages, counts, filter) {"
                     + "\n\tvar params = {command: \"get\", page: pages, count: counts, filters: JSON.stringify(filter)};"
                     + "\n\tcallService(urlbase + \"/%sService.php\", params, \"%s.init\", null);"
-                    + "\n}"
+                    + "\n};"
                     + "\n%s.init = function(data) {"
                     + "\n\tfor (var i = 0; i < data.length; i++) {"
                     , e.getName(), e.getName(), params, attributesInit,e.getName(),e.getName()
@@ -86,7 +85,8 @@ public class JavaScriptClient extends Generator {
             }
             js += "\n\t\t"+e.getName()+"s[data[i].id] = new "+e.getName()+"("+init+");"
                     + "\n\t}"
-                    + "\n}";
+                    + "\n\tgetFinished(" + e.getName() + "s);"
+                    + "\n};";
             js += "\n// </editor-fold>";
         }
         js += "\n// </editor-fold>";
