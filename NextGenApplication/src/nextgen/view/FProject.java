@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import lib.GUIHelper;
 import nextgen.dao.DAO;
+import nextgen.generator.JavaScriptClient;
 import nextgen.generator.PHPObjectOriented;
 import nextgen.model.Element;
 import nextgen.model.Entity;
@@ -220,6 +221,11 @@ public final class FProject extends javax.swing.JFrame {
         jMenu2.add(mGenerate2);
 
         mGenerate3.setText("Javascript Client");
+        mGenerate3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mGenerate3ActionPerformed(evt);
+            }
+        });
         jMenu2.add(mGenerate3);
 
         mGenerate4.setText("Unity3D - C# Client");
@@ -394,21 +400,6 @@ public final class FProject extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         fc.setDialogType(JFileChooser.SAVE_DIALOG);
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//        FileFilter f = new FileFilter() {
-//            @Override
-//            public boolean accept(File pathname) {
-//                if (pathname.isDirectory()) {
-//                    return true;
-//                }
-//                return false;
-//            }
-//
-//            @Override
-//            public String getDescription() {
-//                return "NextGen File";
-//            }
-//        };
-        //fc.setFileFilter(f);
         int retval = fc.showDialog(null, "Generate");
         if (retval == JFileChooser.APPROVE_OPTION) {
             try {
@@ -420,6 +411,22 @@ public final class FProject extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_mPhpOOActionPerformed
+
+    private void mGenerate3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mGenerate3ActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogType(JFileChooser.SAVE_DIALOG);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int retval = fc.showDialog(null, "Generate");
+        if (retval == JFileChooser.APPROVE_OPTION) {
+            try {
+                JavaScriptClient jsc = new JavaScriptClient();
+                jsc.generate(project, fc.getSelectedFile().getAbsolutePath());
+            } catch (Exception ex) {
+                Logger.getLogger(FProject.class.getName()).log(Level.SEVERE, null, ex);
+                GUIHelper.errorMessage(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_mGenerate3ActionPerformed
 
     // <editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
