@@ -42,11 +42,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mLoadActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="mImport">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Import Entities From Project"/>
-              </Properties>
-            </MenuItem>
             <Menu class="javax.swing.JMenu" name="jMenu2">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Generate Code"/>
@@ -82,6 +77,29 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Unity3D - C# Client"/>
                   </Properties>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
+            <Menu class="javax.swing.JMenu" name="jMenu3">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Import"/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="mImportProject">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Other Project"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mImportProjectActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mImportMysql">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Mysql Database"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mImportMysqlActionPerformed"/>
+                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>

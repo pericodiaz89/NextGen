@@ -14,18 +14,18 @@ import java.util.HashSet;
  */
 public class Project extends Entity {
 
-    private HashSet<Element> elements;
+    private ArrayList<Element> elements;
 
     public Project(String name, String description) {
         super(name, description);
-        elements = new HashSet<>();
+        elements = new ArrayList<>();
     }
 
-    public Project(String name, String description, HashSet<Element> elements) {
+    public Project(String name, String description, ArrayList<Element> elements) {
         super(name, description);
         this.elements = elements;
     }
-    
+
     @Override
     public HashMap<String, Object> toHashMap() {
         HashMap<String, Object> map = super.toHashMap();
@@ -34,16 +34,16 @@ public class Project extends Entity {
             elementList.add(a.toHashMap());
         }
         map.put("elements", elementList);
-        
+
         return map;
     }
 
     // <editor-fold defaultstate="collapsed" desc="Get and Set">
-    public HashSet<Element> getElements() {
+    public ArrayList<Element> getElements() {
         return elements;
     }
 
-    public void setElements(HashSet<Element> elements) {
+    public void setElements(ArrayList<Element> elements) {
         this.elements = elements;
     }
     // </editor-fold>

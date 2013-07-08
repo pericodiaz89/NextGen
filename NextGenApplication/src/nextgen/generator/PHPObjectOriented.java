@@ -1,5 +1,6 @@
 package nextgen.generator;
 
+import java.util.ArrayList;
 import java.util.Set;
 import nextgen.model.Element;
 import nextgen.model.Project;
@@ -26,14 +27,13 @@ public class PHPObjectOriented extends Generator {
             createHelpers();
             createModel();
             createServices();
-
         }
     }
 
     public boolean createPackages() throws Exception {
         if (FileManager.generateFolder(directory) || FileManager.checkFolder(directory)) {
             FileManager.generateFolder(directory + "/model");
-            Set<Element> elements = project.getElements();
+            ArrayList<Element> elements = project.getElements();
             for (Element e : elements) {
                 if (e.getPackage1() != null && !FileManager.checkFolder(directory + "/model/" + e.getPackage1().getName())) {
                     FileManager.generateFolder(directory + "/model/" + e.getPackage1().getName());
@@ -136,10 +136,10 @@ public class PHPObjectOriented extends Generator {
             first = true;
             for (Attribute a : e.getAttributes()) {
                 if (first) {
-                    php = String.format(php + ") VALUES ('$%s'", a.getName());
+                    php = String.format(php + ") VALUES ($%s", a.getName());
                     first = false;
                 } else {
-                    php = String.format(php + ",'$%s'", a.getName());
+                    php = String.format(php + ",$%s", a.getName());
                 }
             }
             php = String.format(php + ")\""
@@ -154,10 +154,10 @@ public class PHPObjectOriented extends Generator {
             for (Attribute a : e.getAttributes()) {
                 if (!where.matches(".*"+a.getName()+".*")) {
                     if (first) {
-                        php = String.format(php + "`%s`='$%s'", a.getName(), a.getName());
+                        php = String.format(php + "`%s`=$%s", a.getName(), a.getName());
                         first = false;
                     } else {
-                        php = String.format(php + ",`%s`='$%s'", a.getName(), a.getName());
+                        php = String.format(php + ",`%s`=$%s", a.getName(), a.getName());
                     }
                 }
             }

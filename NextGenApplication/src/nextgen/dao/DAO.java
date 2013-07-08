@@ -43,7 +43,7 @@ public class DAO {
         String descriptionProject = obj.getString("description");
 
         //Capture elements project
-        HashSet<Element> elementList = new HashSet<>();
+        ArrayList<Element> elementList = new ArrayList<>();
         JSONArray elements = obj.getJSONArray("elements");
 
         //Cycle for each element
@@ -57,13 +57,13 @@ public class DAO {
 
             //Attributes
             JSONArray attributes = elem.getJSONArray("attributes");
-            HashSet<Attribute> attributeList = getAttributes(attributes);
+            ArrayList<Attribute> attributeList = getAttributes(attributes);
 
             // <editor-fold defaultstate="collapsed" desc="Key">
             //Capture keys element
             JSONArray keys = elem.getJSONArray("keys");
 
-            HashSet<Key> keysList = new HashSet<>();
+            ArrayList<Key> keysList = new ArrayList<>();
             if (keys != null) {
                 //Cycle for each key
                 for (int j = 0; j < keys.length(); j++) {
@@ -105,8 +105,8 @@ public class DAO {
         return new Project(nameProject, descriptionProject, elementList);
     }
 
-    private HashSet<Attribute> getAttributes(JSONArray attributes) throws Exception {
-        HashSet<Attribute> attributeList = new HashSet<>();
+    private ArrayList<Attribute> getAttributes(JSONArray attributes) throws Exception {
+        ArrayList<Attribute> attributeList = new ArrayList<>();
         if (attributes != null) {
 
             for (int k = 0; k < attributes.length(); k++) {

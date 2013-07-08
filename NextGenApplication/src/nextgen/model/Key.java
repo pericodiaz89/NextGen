@@ -17,15 +17,15 @@ public class Key {
 
     private String name;
     private KeyType type;
-    private HashSet<Attribute> attributes;
+    private ArrayList<Attribute> attributes;
 
     public Key(String name, KeyType type) {
         this.name = name;
         this.type = type;
-        attributes = new HashSet<>();
+        attributes = new ArrayList<>();
     }
 
-    public Key(String name, KeyType type, HashSet<Attribute> attributes) {
+    public Key(String name, KeyType type, ArrayList<Attribute> attributes) {
         this.name = name;
         this.type = type;
         this.attributes = attributes;
@@ -68,11 +68,11 @@ public class Key {
         this.type = type;
     }
 
-    public HashSet<Attribute> getAttributes() {
+    public ArrayList<Attribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(HashSet<Attribute> attributes) {
+    public void setAttributes(ArrayList<Attribute> attributes) {
         this.attributes = attributes;
     }
     // </editor-fold>

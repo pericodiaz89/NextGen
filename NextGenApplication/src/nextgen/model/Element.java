@@ -17,10 +17,10 @@ public class Element extends Entity {
     private Element parent;
     private String tableName;
     private nextgen.model.Package package1;
-    private HashSet<Attribute> attributes;
-    private HashSet<Key> keys;
+    private ArrayList<Attribute> attributes;
+    private ArrayList<Key> keys;
 
-    public Element(String name, String description, String tableName, nextgen.model.Package package1, Element parent, HashSet<Attribute> attributes, HashSet<Key> keys) {
+    public Element(String name, String description, String tableName, nextgen.model.Package package1, Element parent, ArrayList<Attribute> attributes, ArrayList<Key> keys) {
         super(name, description);
         this.parent = parent;
         this.tableName = tableName;
@@ -34,8 +34,8 @@ public class Element extends Entity {
         parent = null;
         this.tableName = tableName;
         this.package1 = new Package("", "");
-        attributes = new HashSet<>();
-        keys = new HashSet<>();
+        attributes = new ArrayList<>();
+        keys = new ArrayList<>();
     }
 
     @Override
@@ -74,19 +74,19 @@ public class Element extends Entity {
         this.parent = parent;
     }
 
-    public HashSet<Attribute> getAttributes() {
+    public ArrayList<Attribute> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(HashSet<Attribute> attributes) {
+    public void setAttributes(ArrayList<Attribute> attributes) {
         this.attributes = attributes;
     }
 
-    public HashSet<Key> getKeys() {
+    public ArrayList<Key> getKeys() {
         return keys;
     }
 
-    public void setKeys(HashSet<Key> keys) {
+    public void setKeys(ArrayList<Key> keys) {
         this.keys = keys;
     }
 

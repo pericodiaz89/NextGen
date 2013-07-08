@@ -61,13 +61,15 @@ public final class FProject extends javax.swing.JFrame {
         mNew = new javax.swing.JMenuItem();
         mSave = new javax.swing.JMenuItem();
         mLoad = new javax.swing.JMenuItem();
-        mImport = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         mGenerate = new javax.swing.JMenuItem();
         mPhpOO = new javax.swing.JMenuItem();
         mGenerate2 = new javax.swing.JMenuItem();
         mGenerate3 = new javax.swing.JMenuItem();
         mGenerate4 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        mImportProject = new javax.swing.JMenuItem();
+        mImportMysql = new javax.swing.JMenuItem();
         mPackage = new javax.swing.JMenu();
         mAddPackage = new javax.swing.JMenuItem();
 
@@ -201,9 +203,6 @@ public final class FProject extends javax.swing.JFrame {
         });
         jMenu1.add(mLoad);
 
-        mImport.setText("Import Entities From Project");
-        jMenu1.add(mImport);
-
         jMenu2.setText("Generate Code");
 
         mGenerate.setText("PHP/Mysql Simplified");
@@ -232,6 +231,26 @@ public final class FProject extends javax.swing.JFrame {
         jMenu2.add(mGenerate4);
 
         jMenu1.add(jMenu2);
+
+        jMenu3.setText("Import");
+
+        mImportProject.setText("Other Project");
+        mImportProject.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mImportProjectActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mImportProject);
+
+        mImportMysql.setText("Mysql Database");
+        mImportMysql.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mImportMysqlActionPerformed(evt);
+            }
+        });
+        jMenu3.add(mImportMysql);
+
+        jMenu1.add(jMenu3);
 
         jMenuBar1.add(jMenu1);
 
@@ -428,6 +447,16 @@ public final class FProject extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_mGenerate3ActionPerformed
 
+    private void mImportProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mImportProjectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mImportProjectActionPerformed
+
+    private void mImportMysqlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mImportMysqlActionPerformed
+        DImportMysql i = new DImportMysql(this);
+        i.setVisible(true);
+        i.setLocationRelativeTo(this);
+    }//GEN-LAST:event_mImportMysqlActionPerformed
+
     // <editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAdd;
@@ -437,6 +466,7 @@ public final class FProject extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -449,7 +479,8 @@ public final class FProject extends javax.swing.JFrame {
     private javax.swing.JMenuItem mGenerate2;
     private javax.swing.JMenuItem mGenerate3;
     private javax.swing.JMenuItem mGenerate4;
-    private javax.swing.JMenuItem mImport;
+    private javax.swing.JMenuItem mImportMysql;
+    private javax.swing.JMenuItem mImportProject;
     private javax.swing.JMenuItem mLoad;
     private javax.swing.JMenuItem mNew;
     private javax.swing.JMenu mPackage;

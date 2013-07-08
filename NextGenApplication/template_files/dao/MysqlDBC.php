@@ -94,7 +94,10 @@ class MysqlDBC {
     }
 
     public function checkVariable($variable) {
-        return mysqli_escape_string($this->connection, $variable);
+        if ($variable == 'null') {
+            return $variable;
+        }
+        return mysqli_escape_string($this->connection, "'$variable'");
     }
 }
 
