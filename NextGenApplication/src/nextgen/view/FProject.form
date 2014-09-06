@@ -73,6 +73,14 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mGenerate3ActionPerformed"/>
                   </Events>
                 </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="mGenerateAngular">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Angular Client"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="mGenerateAngularActionPerformed"/>
+                  </Events>
+                </MenuItem>
                 <MenuItem class="javax.swing.JMenuItem" name="mGenerate4">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Unity3D - C# Client"/>

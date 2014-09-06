@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import lib.GUIHelper;
 import nextgen.dao.DAO;
+import nextgen.generator.AngularClient;
 import nextgen.generator.JavaScriptClient;
 import nextgen.generator.PHPObjectOriented;
 import nextgen.model.Element;
@@ -66,6 +67,7 @@ public final class FProject extends javax.swing.JFrame {
         mPhpOO = new javax.swing.JMenuItem();
         mGenerate2 = new javax.swing.JMenuItem();
         mGenerate3 = new javax.swing.JMenuItem();
+        mGenerateAngular = new javax.swing.JMenuItem();
         mGenerate4 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         mImportProject = new javax.swing.JMenuItem();
@@ -226,6 +228,14 @@ public final class FProject extends javax.swing.JFrame {
             }
         });
         jMenu2.add(mGenerate3);
+
+        mGenerateAngular.setText("Angular Client");
+        mGenerateAngular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mGenerateAngularActionPerformed(evt);
+            }
+        });
+        jMenu2.add(mGenerateAngular);
 
         mGenerate4.setText("Unity3D - C# Client");
         jMenu2.add(mGenerate4);
@@ -457,6 +467,22 @@ public final class FProject extends javax.swing.JFrame {
         i.setLocationRelativeTo(this);
     }//GEN-LAST:event_mImportMysqlActionPerformed
 
+    private void mGenerateAngularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mGenerateAngularActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogType(JFileChooser.SAVE_DIALOG);
+        fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int retval = fc.showDialog(null, "Generate");
+        if (retval == JFileChooser.APPROVE_OPTION) {
+            try {
+                AngularClient ac = new AngularClient();
+                ac.generate(project, fc.getSelectedFile().getAbsolutePath());
+            } catch (Exception ex) {
+                Logger.getLogger(FProject.class.getName()).log(Level.SEVERE, null, ex);
+                GUIHelper.errorMessage(this, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_mGenerateAngularActionPerformed
+
     // <editor-fold defaultstate="collapsed" desc="Variables">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bAdd;
@@ -479,6 +505,7 @@ public final class FProject extends javax.swing.JFrame {
     private javax.swing.JMenuItem mGenerate2;
     private javax.swing.JMenuItem mGenerate3;
     private javax.swing.JMenuItem mGenerate4;
+    private javax.swing.JMenuItem mGenerateAngular;
     private javax.swing.JMenuItem mImportMysql;
     private javax.swing.JMenuItem mImportProject;
     private javax.swing.JMenuItem mLoad;
