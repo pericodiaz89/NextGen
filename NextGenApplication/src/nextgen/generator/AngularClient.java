@@ -56,8 +56,8 @@ public class AngularClient extends Generator {
                 + "\t\tcallback(result);\n"
                 + "\t});\n"
                 + "}\n\n";
-        String delete = "function update" + capitalize(e.getName()) + "($http, obj, callback) {\n"
-                + "\t$http.delete(url + '" + e.getName() + "/',obj).success(function(result) {\n"
+        String delete = "function delete" + capitalize(e.getName()) + "($http, obj, callback) {\n"
+                + "\t$http.delete(url + '" + e.getName().toLowerCase() + "/',obj).success(function(result) {\n"
                 + "\t\tcallback(result);\n"
                 + "\t});\n"
                 + "}\n\n";
